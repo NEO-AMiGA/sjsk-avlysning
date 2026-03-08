@@ -1,0 +1,120 @@
+name: Uppdatera Avlysning
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */2 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Fetch and build index.html
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          API_URL='https://www.forsvarsmakten.se/api/searchapi/get-firing-ranges?lang=sv&county=S%C3%B6dermanlands%20l%C3%A4n&location=H%C3%A4rad&skip=0'
+
+          json="$(curl -fsSL "$API_URL")"
+
+          mapfile -t docs < <(
+          	printf '%s' "$json" | jq -r '
+          		.results[0].documents
+          		| map(
+          			. + (
+          				(.title | capture("-v(?<week>[0-9]+)-(?<year>[0-9]{4})")?)
+          				// {"week":"999","year":"9999"}
+          			)
+          		)
+          		| sort_by((.year | tonumber), (.week | tonumber))
+          		| .[]
+          		| @base64
+          	'
+          )
+
+          sv_time="$(TZ=Europe/Stockholm date '+%Y-%m-%d %H:%M')"
+
+          links_html=""
+          raw_html=""
+
+          for row in "${docs[@]}"; do
+          	item() {
+          		printf '%s' "$row" | base64 -d | jq -r "$1"
+          	}
+
+          	title="$(item '.title')"
+          	url="$(item '.url')"
+          	week="$(item '.week')"
+          	year="$(item '.year')"
+
+            if [[ "$week" == "999" ]]; then
+            	week_label="Okänd vecka"
+            else
+            	week_label="Vecka ${week}"
+            fi
+
+          	links_html+=$'<div class="doc">'
+          	links_html+=$'<div class="week">'"$week_label"$'</div>'
+          	links_html+=$'<div><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></div>'
+          	links_html+=$'</div>'
+
+          	raw_html+=$'<li><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></li>'
+          done
+
+          cat > index.html <<EOF
+          <!doctype html>
+          <html lang="sv">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Härads skjutfält</title>
+            <style>
+              body{font-family:ProximaNova,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:20px;line-height:1.45;color:#111;margin:0}
+              .updated{font-size:14px;color:#666;margin:0 0 20px}
+              .week{font-size:16px;font-weight:700;margin:0 0 4px}
+              .doc{margin:0 0 16px}
+              .doc a{color:#A43027;text-decoration:underline;font-size:15px;font-weight:400}
+              .rawtitle{font-size:16px;font-weight:700;margin:24px 0 6px}
+              .rawblock{font-size:12px;color:#666}
+              .rawblock ul{padding-left:20px;margin:8px 0 0}
+              .rawblock li{margin:4px 0}
+              .rawblock a{color:#A43027;text-decoration:underline;font-weight:400}
+            </style>
+          </head>
+          <body>
+            <p class="updated">Senast uppdaterad: ${sv_time}</p>
+            ${links_html}
+            <div class="rawtitle">Originaldata</div>
+            <div class="rawblock"><ul>${raw_html}</ul></div>
+          </body>
+          </html>
+          EOF
+
+      - name: Commit and push if changed
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- index.html; then
+          	echo "No changes"
+          	exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Update Härad page"
+          git push
