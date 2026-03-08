@@ -83,14 +83,14 @@ jobs:
             <title>Härads skjutfält</title>
             <style>
               body{font-family:ProximaNova,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:20px;line-height:1.45;color:#111;margin:0}
-              .updated{font-size:14px;color:#666;margin:0 0 20px}
-              .week{font-size:16px;font-weight:700;margin:0 0 4px}
-              .doc{margin:0 0 16px}
+              .updated{font-size:14px;color:#666;margin:0 0 16px}
+              .week{font-size:16px;font-weight:700;margin:0 0 1px}
+              .doc{margin:0 0 12px}
               .doc a{color:#A43027;text-decoration:underline;font-size:15px;font-weight:400}
-              .rawtitle{font-size:16px;font-weight:700;margin:24px 0 6px}
+              .rawtitle{font-size:14px;font-weight:600;color:#666;margin:18px 0 4px}
               .rawblock{font-size:12px;color:#666}
-              .rawblock ul{padding-left:20px;margin:8px 0 0}
-              .rawblock li{margin:4px 0}
+              .rawblock ul{padding-left:20px;margin:4px 0 0}
+              .rawblock li{margin:3px 0}
               .rawblock a{color:#A43027;text-decoration:underline;font-weight:400}
             </style>
           </head>
