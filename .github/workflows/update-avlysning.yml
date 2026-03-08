@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: uppdatera-avlysning
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -31,18 +35,18 @@ jobs:
           json="$(curl -fsSL "$API_URL")"
 
           mapfile -t docs < <(
-          	printf '%s' "$json" | jq -r '
-          		.results[0].documents
-          		| map(
-          			. + (
-          				(.title | capture("-v(?<week>[0-9]+)-(?<year>[0-9]{4})")?)
-          				// {"week":"999","year":"9999"}
-          			)
-          		)
-          		| sort_by((.year | tonumber), (.week | tonumber))
-          		| .[]
-          		| @base64
-          	'
+            printf '%s' "$json" | jq -r '
+              .results[0].documents
+              | map(
+                  . + (
+                    (.title | capture("-v(?<week>[0-9]+)-(?<year>[0-9]{4})")?)
+                    // {"week":"999","year":"9999"}
+                  )
+                )
+              | sort_by((.year | tonumber), (.week | tonumber))
+              | .[]
+              | @base64
+            '
           )
 
           sv_time="$(TZ=Europe/Stockholm date '+%Y-%m-%d %H:%M')"
@@ -51,27 +55,26 @@ jobs:
           raw_html=""
 
           for row in "${docs[@]}"; do
-          	item() {
-          		printf '%s' "$row" | base64 -d | jq -r "$1"
-          	}
+            item() {
+              printf '%s' "$row" | base64 -d | jq -r "$1"
+            }
 
-          	title="$(item '.title')"
-          	url="$(item '.url')"
-          	week="$(item '.week')"
-          	year="$(item '.year')"
+            title="$(item '.title')"
+            url="$(item '.url')"
+            week="$(item '.week')"
 
             if [[ "$week" == "999" ]]; then
-            	week_label="Okänd vecka"
+              week_label="Okänd vecka"
             else
-            	week_label="Vecka ${week}"
+              week_label="Vecka ${week}"
             fi
 
-          	links_html+=$'<div class="doc">'
-          	links_html+=$'<div class="week">'"$week_label"$'</div>'
-          	links_html+=$'<div><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></div>'
-          	links_html+=$'</div>'
+            links_html+=$'<div class="doc">'
+            links_html+=$'<div class="week">'"$week_label"$'</div>'
+            links_html+=$'<div><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></div>'
+            links_html+=$'</div>'
 
-          	raw_html+=$'<li><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></li>'
+            raw_html+=$'<li><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></li>'
           done
 
           cat > index.html <<EOF
@@ -87,7 +90,7 @@ jobs:
               .week{font-size:16px;font-weight:700;margin:0 0 1px}
               .doc{margin:0 0 12px}
               .doc a{color:#A43027;text-decoration:underline;font-size:15px;font-weight:400}
-              .rawtitle{font-size:14px;font-weight:600;color:#666;margin:18px 0 4px}
+              .rawtitle{font-size:11px;font-weight:600;color:#777;margin:16px 0 4px}
               .rawblock{font-size:12px;color:#666}
               .rawblock ul{padding-left:20px;margin:4px 0 0}
               .rawblock li{margin:3px 0}
@@ -97,7 +100,7 @@ jobs:
           <body>
             <p class="updated">Senast uppdaterad: ${sv_time}</p>
             ${links_html}
-            <div class="rawtitle">Originaldata</div>
+            <div class="rawtitle">Originaldata i debug-syfte för webmaster</div>
             <div class="rawblock"><ul>${raw_html}</ul></div>
           </body>
           </html>
@@ -107,17 +110,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-      
+
           if git diff --quiet -- index.html; then
             echo "No changes"
             exit 0
           fi
-      
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      
+
           git add index.html
           git commit -m "Update Härad page"
-      
           git pull --rebase origin main
           git push origin main
