@@ -158,6 +158,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          branch_name="${GITHUB_REF_NAME}"
 
           if git diff --quiet -- index.html; then
             echo "No changes"
@@ -169,5 +170,5 @@ jobs:
 
           git add index.html
           git commit -m "Update Härad page"
-          git pull --rebase origin main
-          git push origin main
+          git pull --rebase origin "${branch_name}"
+          git push origin "${branch_name}"
