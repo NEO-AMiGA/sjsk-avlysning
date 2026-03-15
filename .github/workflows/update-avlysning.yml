@@ -15,22 +15,33 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    env:
+      API_URL: https://www.forsvarsmakten.se/api/searchapi/get-firing-ranges?lang=sv&county=S%C3%B6dermanlands%20l%C3%A4n&location=H%C3%A4rad&skip=0
+      HARAD_PDF_DIR: /tmp/harad-pdfs
+      HARAD_JSON_DIR: /tmp/harad-week-table
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
 
       - name: Install jq
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
 
-      - name: Fetch and build index.html
+      - name: Fetch documents and build fallback index.html
         shell: bash
         run: |
           set -euo pipefail
-
-          API_URL='https://www.forsvarsmakten.se/api/searchapi/get-firing-ranges?lang=sv&county=S%C3%B6dermanlands%20l%C3%A4n&location=H%C3%A4rad&skip=0'
 
           json="$(curl -fsSL "$API_URL")"
 
@@ -83,6 +94,7 @@ jobs:
           <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no">
             <title>Härads skjutfält</title>
             <style>
               body{font-family:ProximaNova,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:20px;line-height:1.45;color:#111;margin:0}
@@ -102,9 +114,43 @@ jobs:
             ${links_html}
             <div class="rawtitle">Originaldata i debug-syfte för webmaster</div>
             <div class="rawblock"><ul>${raw_html}</ul></div>
+            <script>
+              window.addEventListener('load', function () {
+                parent.postMessage(
+                  {
+                    type: 'HARAD_HEIGHT',
+                    h: document.documentElement.scrollHeight
+                  },
+                  '*'
+                );
+              });
+            </script>
           </body>
           </html>
           EOF
+
+          mkdir -p "$HARAD_PDF_DIR"
+
+          for row in "${docs[@]}"; do
+            item() {
+              printf '%s' "$row" | base64 -d | jq -r "$1"
+            }
+
+            title="$(item '.title')"
+            url="$(item '.url')"
+            file_name="$(printf '%s' "$title" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
+
+            curl -fsSL "https://www.forsvarsmakten.se${url}" -o "${HARAD_PDF_DIR}/${file_name}"
+          done
+
+      - name: Verify parser against sample PDFs
+        run: npm run verify:harad-week-table
+
+      - name: Parse downloaded PDFs
+        run: npm run parse:harad-week-table
+
+      - name: Render parsed table into index.html
+        run: npm run render:harad-week-table-html
 
       - name: Commit and push if changed
         shell: bash

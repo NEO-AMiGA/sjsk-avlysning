@@ -1,8 +1,8 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const indexPath = path.resolve('index.html');
-const jsonDir = path.resolve('data/debug/harad-week-table');
+const indexPath = path.resolve(process.env.HARAD_INDEX_PATH ?? 'index.html');
+const jsonDir = path.resolve(process.env.HARAD_JSON_DIR ?? 'data/debug/harad-week-table');
 
 const styleStartMarker = '    /* parsed-week-table:start */';
 const styleEndMarker = '    /* parsed-week-table:end */';

@@ -3,8 +3,8 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { PDFParse } from 'pdf-parse';
 
-const samplesDir = path.resolve('data/samples');
-const outputDir = path.resolve('data/debug/harad-week-table');
+const samplesDir = path.resolve(process.env.HARAD_PDF_DIR ?? 'data/samples');
+const outputDir = path.resolve(process.env.HARAD_JSON_DIR ?? 'data/debug/harad-week-table');
 
 const dayNameMap = {
   Måndag: 'Monday',
