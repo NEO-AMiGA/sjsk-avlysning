@@ -144,6 +144,8 @@ jobs:
           done
 
       - name: Verify parser against sample PDFs
+        env:
+          HARAD_PDF_DIR: data/samples
         run: npm run verify:harad-week-table
 
       - name: Parse downloaded PDFs
