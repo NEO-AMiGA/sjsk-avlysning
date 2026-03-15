@@ -58,6 +58,9 @@ function buildStyles() {
     '    .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}',
     '    .tablewrap{overflow-x:auto;margin:0 0 10px}',
     '    .tablebox{display:inline-block;min-width:max-content;max-width:100%}',
+    '    .rawtitle{font-size:10px;color:#8b8b8b}',
+    '    .rawblock{font-size:11px;color:#7a7a7a}',
+    '    .rawblock a{color:#8a6a66}',
     '    .weektable{width:auto;min-width:0;border-collapse:collapse;font-size:13px}',
     '    .weektable th{font-size:11px;font-weight:700;color:#111;text-align:left;padding:0 11px 5px 0;border-bottom:1px solid #ddd;white-space:nowrap}',
     '    .weektable td{padding:4px 11px 4px 0;border-bottom:1px solid #eee;vertical-align:top;white-space:nowrap}',
@@ -82,6 +85,16 @@ function formatCellValue(value) {
   return value ? escapeHtml(value) : '<span class="empty">-</span>';
 }
 
+function renderDateValue(value) {
+  const [dayNumber, monthToken] = value.split(/\s+/, 2);
+
+  if (!dayNumber || !monthToken) {
+    return escapeHtml(value);
+  }
+
+  return `${escapeHtml(dayNumber)} <span class="month">${escapeHtml(monthToken.toLowerCase())}</span>`;
+}
+
 function renderDangerValue(value) {
   if (value === 'JA') {
     return '<span class="risk-badge risk-yes">JA</span>';
@@ -101,7 +114,7 @@ function buildDayRow(week, day) {
     `          <tr${rowClass}>`,
     `            <td class="col-week">${displayedWeek}</td>`,
     `            <td>${escapeHtml(dayNameMap[day.dayName] ?? day.dayName)}</td>`,
-    `            <td>${escapeHtml(day.date)}</td>`,
+    `            <td>${renderDateValue(day.date)}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
     '          </tr>',
@@ -130,7 +143,7 @@ function buildSection(weeks) {
           '          <th class="col-week">Vecka</th>',
           '          <th>Dag</th>',
           '          <th>Datum</th>',
-          '          <th class="center col-focus col-time">Förbudstid</th>',
+          '          <th class="center col-focus col-time">Avlyst tid</th>',
           '          <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>',
         '        </tr>',
       '      </thead>',
