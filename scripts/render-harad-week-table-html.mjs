@@ -145,7 +145,7 @@ function buildSection(weeks) {
 
   return [
     sectionStartMarker,
-    '  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Verifiera mot PDF vid oklarheter. Original-PDF är alltid gällande.</div>',
+    '  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>',
     '  <div class="tableinfo">',
     '    <p class="tableinfo-strong">⚠️ Det är LIVSFARLIGT att under nedan angivna klockslag beträda skjutfältet.</p>',
     '  </div>',

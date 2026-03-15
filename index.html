@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no">
   <title>Härads skjutfält</title>
   <style>
     body{font-family:ProximaNova,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:20px;line-height:1.45;color:#111;margin:0}
@@ -47,7 +48,7 @@
   <p class="updated">Senast uppdaterad: 2026-03-15 11:29</p>
   <div class="doc"><div class="week">Vecka 11</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v11-2026-andringstryck-1.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v11-2026 Ändringstryck 1.pdf</a></div></div><div class="doc"><div class="week">Vecka 12</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v12-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v12-2026.pdf</a></div></div><div class="doc"><div class="week">Vecka 13</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v13-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v13-2026.pdf</a></div></div>
   <!-- parsed-week-table:start -->
-  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Verifiera mot PDF vid oklarheter. Original-PDF är alltid gällande.</div>
+  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>
   <div class="tableinfo">
     <p class="tableinfo-strong">⚠️ Det är LIVSFARLIGT att under nedan angivna klockslag beträda skjutfältet.</p>
   </div>
@@ -263,7 +264,16 @@
   <!-- parsed-week-table:end -->
   <div class="rawtitle">Originaldata i debug-syfte för webmaster</div>
   <div class="rawblock"><ul><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v11-2026-andringstryck-1.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v11-2026 Ändringstryck 1.pdf</a></li><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v12-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v12-2026.pdf</a></li><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v13-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande-harad-v13-2026.pdf</a></li></ul></div>
+  <script>
+    window.addEventListener('load', function () {
+      parent.postMessage(
+        {
+          type: 'HARAD_HEIGHT',
+          h: document.documentElement.scrollHeight
+        },
+        '*'
+      );
+    });
+  </script>
 </body>
 </html>
-
-<script>window.addEventListener('load',function(){parent.postMessage({type:'HARAD_HEIGHT',h:document.documentElement.scrollHeight},'*');});</script>
