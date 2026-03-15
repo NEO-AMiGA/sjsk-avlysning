@@ -1,0 +1,13 @@
+{
+  "name": "sjsk-avlysning",
+  "private": true,
+  "scripts": {
+    "extract:harad-rawtext": "node scripts/extract-harad-rawtext.mjs",
+    "parse:harad-week-table": "node scripts/parse-harad-week-table.mjs",
+    "render:harad-week-table-html": "node scripts/render-harad-week-table-html.mjs",
+    "verify:harad-week-table": "node scripts/verify-harad-week-table.mjs"
+  },
+  "dependencies": {
+    "pdf-parse": "^2.4.5"
+  }
+}
