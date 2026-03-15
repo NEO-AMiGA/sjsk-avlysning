@@ -1,0 +1,61 @@
+{
+  "week": 12,
+  "days": [
+    {
+      "dayName": "Monday",
+      "date": "16 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "",
+      "note": ""
+    },
+    {
+      "dayName": "Tuesday",
+      "date": "17 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "1000-1600",
+      "note": "1)"
+    },
+    {
+      "dayName": "Wednesday",
+      "date": "18 Mar",
+      "restrictedTime": "0900-1630",
+      "dangerRange": "JA",
+      "otherActivity": "",
+      "note": ""
+    },
+    {
+      "dayName": "Thursday",
+      "date": "19 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "1000-1600",
+      "note": "1)"
+    },
+    {
+      "dayName": "Friday",
+      "date": "20 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "",
+      "note": ""
+    },
+    {
+      "dayName": "Saturday",
+      "date": "21 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "",
+      "note": ""
+    },
+    {
+      "dayName": "Sunday",
+      "date": "22 Mar",
+      "restrictedTime": "-",
+      "dangerRange": "",
+      "otherActivity": "",
+      "note": ""
+    }
+  ]
+}
