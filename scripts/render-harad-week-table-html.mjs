@@ -56,7 +56,6 @@ function buildStyles() {
     '    .tablehint{font-size:12px;color:#444;background:#fbf7d9;border-left:3px solid #d7bb4a;padding:8px 10px;margin:18px 0 10px}',
     '    .tableinfo{margin:0 0 10px}',
     '    .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}',
-    '    .tableinfo-note{font-size:12px;color:#555;margin:8px 0 0;text-align:right}',
     '    .tablewrap{overflow-x:auto;margin:0 0 10px}',
     '    .tablebox{display:inline-block;min-width:max-content;max-width:100%}',
     '    .weektable{width:auto;min-width:0;border-collapse:collapse;font-size:13px}',
@@ -75,20 +74,8 @@ function buildStyles() {
     '    .weektable .col-week{width:40px}',
     '    .weektable .col-time{min-width:92px}',
     '    .weektable .col-danger{min-width:80px}',
-    '    .weektable .col-activity{min-width:108px}',
-    '    .weektable .col-note{min-width:92px;white-space:normal}',
     styleEndMarker,
   ].join('\n');
-}
-
-function sanitizeNote(value) {
-  const normalizedValue = value.trim();
-
-  if (normalizedValue === 'Reserverat för jakt') {
-    return '';
-  }
-
-  return normalizedValue;
 }
 
 function formatCellValue(value) {
@@ -106,24 +93,9 @@ function renderDangerValue(value) {
 
   return '<span class="empty">-</span>';
 }
-
-function getNoteTitle(note) {
-  if (note === '1)') {
-    return ' title="Vid 1) kontakta Övningsledaren."';
-  }
-
-  if (note === '2)') {
-    return ' title="Vid 2) kontakta Skjutfältschefen."';
-  }
-
-  return '';
-}
-
 function buildDayRow(week, day) {
-  const normalizedNote = sanitizeNote(day.note);
   const displayedWeek = day.dayName === 'Monday' ? String(week) : '';
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
-  const noteTitle = getNoteTitle(normalizedNote);
 
   return [
     `          <tr${rowClass}>`,
@@ -132,20 +104,21 @@ function buildDayRow(week, day) {
     `            <td>${escapeHtml(day.date)}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
-    `            <td class="center col-activity">${formatCellValue(day.otherActivity)}</td>`,
-    `            <td class="col-note"${noteTitle}>${formatCellValue(normalizedNote)}</td>`,
     '          </tr>',
   ].join('\n');
 }
 
 function buildSection(weeks) {
+  // The current text-extraction approach is stable enough for week/day/date,
+  // restricted time, and danger range, but not visually reliable enough to
+  // render "Annan verksamhet" or "Anmärkning" from the PDF template yet.
   const rows = weeks
     .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.week, day)))
     .join('\n');
 
   return [
     sectionStartMarker,
-    '  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>',
+    '  <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Kolumnerna &quot;Annan verksamhet&quot; och &quot;Anmärkning&quot; visas inte här, så verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>',
     '  <div class="tableinfo">',
     '    <p class="tableinfo-strong">⚠️ Det är LIVSFARLIGT att under nedan angivna klockslag beträda skjutfältet.</p>',
     '  </div>',
@@ -159,15 +132,12 @@ function buildSection(weeks) {
           '          <th>Datum</th>',
           '          <th class="center col-focus col-time">Förbudstid</th>',
           '          <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>',
-          '          <th class="center col-activity">Annan<br>verksamhet</th>',
-          '          <th class="col-note">Anmärkning</th>',
         '        </tr>',
       '      </thead>',
       '      <tbody>',
     rows,
     '      </tbody>',
     '    </table>',
-    '      <div class="tableinfo-note">Vid 1) kontakta Övningsledaren. Vid 2) kontakta Skjutfältschefen.</div>',
     '    </div>',
   '  </div>',
     sectionEndMarker,
