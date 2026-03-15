@@ -266,8 +266,4 @@
 </body>
 </html>
 
-<script>
-window.addEventListener('load', function() {
-  parent.postMessage({ type: 'test', text: 'hello from iframe' }, '*');
-});
-</script>
+<script>window.addEventListener('load',function(){parent.postMessage({type:'HARAD_HEIGHT',h:document.documentElement.scrollHeight},'*');});</script>
