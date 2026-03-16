@@ -74,6 +74,9 @@ function buildStyles() {
     '    .weektable .risk-empty,.weektable .empty{color:#999}',
     '    .weektable .center{text-align:center}',
     '    .weektable .time{text-align:center}',
+    '    .weektable .today-day{font-weight:600}',
+    '    .weektable .today-date{font-weight:700}',
+    '    .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}',
     '    .weektable .col-week{width:40px}',
     '    .weektable .col-time{min-width:92px}',
     '    .weektable .col-danger{min-width:80px}',
@@ -106,15 +109,37 @@ function renderDangerValue(value) {
 
   return '<span class="empty">-</span>';
 }
+
+function getTodayDateKey() {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    timeZone: 'Europe/Stockholm',
+  })
+    .format(new Date())
+    .replace('.', '');
+}
+
+const todayDateKey = getTodayDateKey();
+
+function isTodayDate(value, todayDateKey) {
+  return value.replace('.', '') === todayDateKey;
+}
+
 function buildDayRow(week, day) {
   const displayedWeek = day.dayName === 'Monday' ? String(week) : '';
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
+  const isToday = isTodayDate(day.date, todayDateKey);
+  const dayCellClass = isToday ? ' class="today-day"' : '';
+  const dateCellClass = isToday ? ' class="today-date"' : '';
+  const dateValue = renderDateValue(day.date);
+  const renderedDate = isToday ? `<span class="date-emphasis">${dateValue}</span>` : dateValue;
 
   return [
     `          <tr${rowClass}>`,
     `            <td class="col-week">${displayedWeek}</td>`,
-    `            <td>${escapeHtml(dayNameMap[day.dayName] ?? day.dayName)}</td>`,
-    `            <td>${renderDateValue(day.date)}</td>`,
+    `            <td${dayCellClass}>${escapeHtml(dayNameMap[day.dayName] ?? day.dayName)}</td>`,
+    `            <td${dateCellClass}>${renderedDate}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
     '          </tr>',
