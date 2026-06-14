@@ -130,6 +130,7 @@ function parseDayLine(line) {
   const day = {
     dayName: dayNameMap[swedishDayName],
     date: normalizeDate(dayNumber, monthToken),
+    sourceDateLabel: `${dayNumber.padStart(2, '0')} ${monthToken}`,
     restrictedTime: '',
     dangerRange: '',
     otherActivity: '',

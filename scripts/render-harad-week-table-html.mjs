@@ -1,8 +1,18 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import {
+  formatIsoDateForDisplay,
+  getSourceWeek,
+  getSourceYear,
+  isoWeekDate,
+  sourceLabelToIsoDate,
+} from './harad-week-utils.mjs';
 
 const indexPath = path.resolve(process.env.HARAD_INDEX_PATH ?? 'index.html');
 const jsonDir = path.resolve(process.env.HARAD_JSON_DIR ?? 'data/debug/harad-week-table');
+const metadataPath = process.env.HARAD_METADATA_PATH
+  ? path.resolve(process.env.HARAD_METADATA_PATH)
+  : null;
 
 const styleStartMarker = '    /* parsed-week-table:start */';
 const styleEndMarker = '    /* parsed-week-table:end */';
@@ -30,6 +40,24 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+async function loadMetadataMap() {
+  if (!metadataPath) {
+    return new Map();
+  }
+
+  try {
+    const content = await readFile(metadataPath, 'utf8');
+    const items = JSON.parse(content);
+    return new Map(items.map((item) => [item.filename, item]));
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return new Map();
+    }
+
+    throw error;
+  }
 }
 
 function replaceOrInsert(content, startMarker, endMarker, replacement, anchor) {
@@ -74,12 +102,16 @@ function buildStyles() {
     '    .weektable .risk-empty,.weektable .empty{color:#999}',
     '    .weektable .center{text-align:center}',
     '    .weektable .time{text-align:center}',
+    '    .weektable .control{white-space:normal;line-height:1.2}',
+    '    .weektable .control-flag{font-weight:700;color:#8b2d21}',
+    '    .weektable .control-detail{font-size:11px;color:#7a514b}',
     '    .weektable .today-day{font-weight:600}',
     '    .weektable .today-date{font-weight:700}',
     '    .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}',
     '    .weektable .col-week{width:40px}',
     '    .weektable .col-time{min-width:92px}',
     '    .weektable .col-danger{min-width:80px}',
+    '    .weektable .col-control{min-width:132px}',
     styleEndMarker,
   ].join('\n');
 }
@@ -98,6 +130,10 @@ function renderDateValue(value) {
   return `${escapeHtml(dayNumber)} <span class="month">${escapeHtml(monthToken.toLowerCase())}</span>`;
 }
 
+function renderIsoDateValue(value) {
+  return renderDateValue(formatIsoDateForDisplay(value));
+}
+
 function renderDangerValue(value) {
   if (value === 'JA') {
     return '<span class="risk-badge risk-yes">JA</span>';
@@ -110,29 +146,62 @@ function renderDangerValue(value) {
   return '<span class="empty">-</span>';
 }
 
-function getTodayDateKey() {
-  return new Intl.DateTimeFormat('en-GB', {
+function getTodayIsoDate() {
+  return new Intl.DateTimeFormat('sv-SE', {
+    year: 'numeric',
+    month: '2-digit',
     day: '2-digit',
-    month: 'short',
     timeZone: 'Europe/Stockholm',
-  })
-    .format(new Date())
-    .replace('.', '');
+  }).format(new Date());
 }
 
-const todayDateKey = getTodayDateKey();
+const todayIsoDate = getTodayIsoDate();
 
-function isTodayDate(value, todayDateKey) {
-  return value.replace('.', '') === todayDateKey;
+function isTodayDate(value) {
+  return value === todayIsoDate;
 }
 
-function buildDayRow(week, day) {
+function enrichWeek(weekEntry, metadata) {
+  const year = getSourceYear(metadata, weekEntry.pdfFilename);
+  const week = getSourceWeek(metadata, weekEntry.data.week, weekEntry.pdfFilename);
+  const days = weekEntry.data.days.map((day) => {
+    const sourceDateLabel = day.sourceDateLabel ?? day.date;
+
+    return {
+      ...day,
+      sourceDateLabel,
+      sourceDate: sourceLabelToIsoDate(sourceDateLabel, year),
+      exportedDate: isoWeekDate(year, week, day.dayName),
+    };
+  });
+  const hasDateMismatch = days.some((day) => day.sourceDate && day.exportedDate && day.sourceDate !== day.exportedDate);
+
+  return {
+    ...weekEntry,
+    sourceWeek: week,
+    sourceYear: year,
+    hasDateMismatch,
+    days,
+  };
+}
+
+function buildControlCell(day, hasDateMismatch) {
+  if (!hasDateMismatch) {
+    return '<span class="empty">-</span>';
+  }
+
+  const title = day.sourceDateLabel ? ` title="PDF-raddatum: ${escapeHtml(day.sourceDateLabel)}"` : '';
+
+  return `<span class="control-flag"${title}>KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span>`;
+}
+
+function buildDayRow(week, day, hasDateMismatch) {
   const displayedWeek = day.dayName === 'Monday' ? String(week) : '';
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
-  const isToday = isTodayDate(day.date, todayDateKey);
+  const isToday = isTodayDate(day.exportedDate);
   const dayCellClass = isToday ? ' class="today-day"' : '';
   const dateCellClass = isToday ? ' class="today-date"' : '';
-  const dateValue = renderDateValue(day.date);
+  const dateValue = renderIsoDateValue(day.exportedDate);
   const renderedDate = isToday ? `<span class="date-emphasis">${dateValue}</span>` : dateValue;
 
   return [
@@ -142,6 +211,7 @@ function buildDayRow(week, day) {
     `            <td${dateCellClass}>${renderedDate}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
+    `            <td class="control col-control">${buildControlCell(day, hasDateMismatch)}</td>`,
     '          </tr>',
   ].join('\n');
 }
@@ -151,7 +221,7 @@ function buildSection(weeks) {
   // restricted time, and danger range, but not visually reliable enough to
   // render "Annan verksamhet" or "Anmärkning" from the PDF template yet.
   const rows = weeks
-    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.week, day)))
+    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.sourceWeek, day, weekData.hasDateMismatch)))
     .join('\n');
 
   return [
@@ -170,6 +240,7 @@ function buildSection(weeks) {
           '          <th>Datum</th>',
           '          <th class="center col-focus col-time">Avlyst tid</th>',
           '          <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>',
+          '          <th class="col-control">Kontroll</th>',
         '        </tr>',
       '      </thead>',
       '      <tbody>',
@@ -194,7 +265,12 @@ async function loadWeeks() {
     jsonFiles.map(async (filename) => {
       const filePath = path.join(jsonDir, filename);
       const fileContent = await readFile(filePath, 'utf8');
-      return JSON.parse(fileContent);
+      const data = JSON.parse(fileContent);
+      return {
+        week: data.week,
+        pdfFilename: filename.replace(/\.json$/i, '.pdf'),
+        data,
+      };
     }),
   );
 
@@ -202,17 +278,19 @@ async function loadWeeks() {
 }
 
 async function main() {
-  const [indexHtml, weeks] = await Promise.all([
+  const [indexHtml, weeks, metadataMap] = await Promise.all([
     readFile(indexPath, 'utf8'),
     loadWeeks(),
+    loadMetadataMap(),
   ]);
+  const enrichedWeeks = weeks.map((weekEntry) => enrichWeek(weekEntry, metadataMap.get(weekEntry.pdfFilename)));
 
   const withStyles = replaceOrInsert(indexHtml, styleStartMarker, styleEndMarker, buildStyles(), '  </style>');
   const withSection = replaceOrInsert(
     withStyles,
     sectionStartMarker,
     sectionEndMarker,
-    buildSection(weeks),
+    buildSection(enrichedWeeks),
     '  <div class="rawtitle">',
   );
 

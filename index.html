@@ -38,12 +38,16 @@
     .weektable .risk-empty,.weektable .empty{color:#999}
     .weektable .center{text-align:center}
     .weektable .time{text-align:center}
+    .weektable .control{white-space:normal;line-height:1.2}
+    .weektable .control-flag{font-weight:700;color:#8b2d21}
+    .weektable .control-detail{font-size:11px;color:#7a514b}
     .weektable .today-day{font-weight:600}
     .weektable .today-date{font-weight:700}
     .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}
     .weektable .col-week{width:40px}
     .weektable .col-time{min-width:92px}
     .weektable .col-danger{min-width:80px}
+    .weektable .col-control{min-width:132px}
     /* parsed-week-table:end */
   </style>
 </head>
@@ -65,6 +69,7 @@
           <th>Datum</th>
           <th class="center col-focus col-time">Avlyst tid</th>
           <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>
+          <th class="col-control">Kontroll</th>
         </tr>
       </thead>
       <tbody>
@@ -74,6 +79,7 @@
             <td>08 <span class="month">jun</span></td>
             <td class="col-time time">0800-2400</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -81,6 +87,7 @@
             <td>09 <span class="month">jun</span></td>
             <td class="col-time time">0000-1000</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -88,6 +95,7 @@
             <td>10 <span class="month">jun</span></td>
             <td class="col-time time">1000-2400</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -95,6 +103,7 @@
             <td>11 <span class="month">jun</span></td>
             <td class="col-time time">0000-1100</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -102,6 +111,7 @@
             <td>12 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -109,6 +119,7 @@
             <td>13 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -116,6 +127,7 @@
             <td class="today-date"><span class="date-emphasis">14 <span class="month">jun</span></span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week">25</td>
@@ -123,6 +135,7 @@
             <td>15 <span class="month">jun</span></td>
             <td class="col-time time">1000-1500</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -130,6 +143,7 @@
             <td>16 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -137,6 +151,7 @@
             <td>17 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -144,6 +159,7 @@
             <td>18 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -151,6 +167,7 @@
             <td>19 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -158,6 +175,7 @@
             <td>20 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
@@ -165,55 +183,63 @@
             <td>21 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week">26</td>
             <td>Måndag</td>
-            <td>15 <span class="month">jun</span></td>
+            <td>22 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 15 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Tisdag</td>
-            <td>16 <span class="month">jun</span></td>
+            <td>23 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 16 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Onsdag</td>
-            <td>17 <span class="month">jun</span></td>
+            <td>24 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 17 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Torsdag</td>
-            <td>18 <span class="month">jun</span></td>
+            <td>25 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 18 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week"></td>
             <td>Fredag</td>
-            <td>19 <span class="month">jun</span></td>
+            <td>26 <span class="month">jun</span></td>
             <td class="col-time time">0900-1700</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 19 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week"></td>
             <td>Lördag</td>
-            <td>20 <span class="month">jun</span></td>
+            <td>27 <span class="month">jun</span></td>
             <td class="col-time time">0900-1700</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 20 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week"></td>
             <td>Söndag</td>
-            <td>21 <span class="month">jun</span></td>
+            <td>28 <span class="month">jun</span></td>
             <td class="col-time time">0900-1700</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
+            <td class="control col-control"><span class="control-flag" title="PDF-raddatum: 21 jun">KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span></td>
           </tr>
       </tbody>
     </table>

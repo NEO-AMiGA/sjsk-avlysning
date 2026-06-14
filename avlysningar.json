@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-14T11:13:26.710Z",
+  "generatedAt": "2026-06-14T11:25:04.745Z",
   "source": "forsvarsmakten",
   "range": "harad",
   "items": [
@@ -14,7 +14,12 @@
       "restrictedTime": "08:00-24:00",
       "dangerRange": "NEJ",
       "pdfTitle": "varningsmeddelande-harad-v24-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf",
+      "sourceDate": "2026-06-08",
+      "sourceDateLabel": "08 jun",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
     },
     {
       "id": "harad-2026-v24-2026-06-09-0000-1000",
@@ -27,7 +32,12 @@
       "restrictedTime": "00:00-10:00",
       "dangerRange": "NEJ",
       "pdfTitle": "varningsmeddelande-harad-v24-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf",
+      "sourceDate": "2026-06-09",
+      "sourceDateLabel": "09 jun",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
     },
     {
       "id": "harad-2026-v24-2026-06-10-1000-2400",
@@ -40,7 +50,12 @@
       "restrictedTime": "10:00-24:00",
       "dangerRange": "NEJ",
       "pdfTitle": "varningsmeddelande-harad-v24-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf",
+      "sourceDate": "2026-06-10",
+      "sourceDateLabel": "10 jun",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
     },
     {
       "id": "harad-2026-v24-2026-06-11-0000-1100",
@@ -53,7 +68,12 @@
       "restrictedTime": "00:00-11:00",
       "dangerRange": "NEJ",
       "pdfTitle": "varningsmeddelande-harad-v24-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v24-2026.pdf",
+      "sourceDate": "2026-06-11",
+      "sourceDateLabel": "11 jun",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
     },
     {
       "id": "harad-2026-v25-2026-06-15-1000-1500",
@@ -66,46 +86,72 @@
       "restrictedTime": "10:00-15:00",
       "dangerRange": "JA",
       "pdfTitle": "varningsmeddelande-harad-v25-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v25-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v25-2026.pdf",
+      "sourceDate": "2026-06-15",
+      "sourceDateLabel": "15 jun",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": true
     },
     {
-      "id": "harad-2026-v26-2026-06-19-0900-1700",
+      "id": "harad-2026-v26-2026-06-26-0900-1700",
       "week": 26,
       "year": 2026,
       "dayName": "Fredag",
-      "date": "2026-06-19",
+      "date": "2026-06-26",
       "start": "09:00",
       "end": "17:00",
       "restrictedTime": "09:00-17:00",
       "dangerRange": "JA",
       "pdfTitle": "varningsmeddelande-harad-v26-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf",
+      "sourceDate": "2026-06-19",
+      "sourceDateLabel": "19 jun",
+      "warnings": [
+        "DATE_OUTSIDE_SOURCE_WEEK"
+      ],
+      "reviewRequired": true,
+      "calendarEligible": true
     },
     {
-      "id": "harad-2026-v26-2026-06-20-0900-1700",
+      "id": "harad-2026-v26-2026-06-27-0900-1700",
       "week": 26,
       "year": 2026,
       "dayName": "Lördag",
-      "date": "2026-06-20",
+      "date": "2026-06-27",
       "start": "09:00",
       "end": "17:00",
       "restrictedTime": "09:00-17:00",
       "dangerRange": "JA",
       "pdfTitle": "varningsmeddelande-harad-v26-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf",
+      "sourceDate": "2026-06-20",
+      "sourceDateLabel": "20 jun",
+      "warnings": [
+        "DATE_OUTSIDE_SOURCE_WEEK"
+      ],
+      "reviewRequired": true,
+      "calendarEligible": true
     },
     {
-      "id": "harad-2026-v26-2026-06-21-0900-1700",
+      "id": "harad-2026-v26-2026-06-28-0900-1700",
       "week": 26,
       "year": 2026,
       "dayName": "Söndag",
-      "date": "2026-06-21",
+      "date": "2026-06-28",
       "start": "09:00",
       "end": "17:00",
       "restrictedTime": "09:00-17:00",
       "dangerRange": "JA",
       "pdfTitle": "varningsmeddelande-harad-v26-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf"
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026.pdf",
+      "sourceDate": "2026-06-21",
+      "sourceDateLabel": "21 jun",
+      "warnings": [
+        "DATE_OUTSIDE_SOURCE_WEEK"
+      ],
+      "reviewRequired": true,
+      "calendarEligible": true
     }
   ]
 }
