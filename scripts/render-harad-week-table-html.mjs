@@ -91,7 +91,7 @@ function buildStyles() {
     '    .rawblock a{color:#8a6a66}',
     '    .weektable{width:auto;min-width:0;border-collapse:collapse;font-size:13px}',
     '    .weektable th{font-size:11px;font-weight:700;color:#111;text-align:left;padding:0 11px 5px 0;border-bottom:1px solid #ddd;white-space:nowrap}',
-    '    .weektable td{padding:4px 11px 4px 0;border-bottom:1px solid #eee;vertical-align:top;white-space:nowrap}',
+    '    .weektable td{padding:4px 11px 4px 0;border-bottom:1px solid #eee;vertical-align:middle;white-space:nowrap}',
     '    .weektable td:last-child,.weektable th:last-child{padding-right:0}',
     '    .weektable th.col-focus{background:rgba(241,218,102,0.18);border-bottom-color:#d5c15d;box-shadow:inset 0 -1px 0 rgba(164,48,39,0.18)}',
     '    .weektable tr.row-ja td{background:rgba(164,48,39,0.07)}',
@@ -178,6 +178,7 @@ function enrichWeek(weekEntry, metadata) {
 
   return {
     ...weekEntry,
+    pdfUrl: metadata?.url ?? '',
     sourceWeek: week,
     sourceYear: year,
     hasDateMismatch,
@@ -185,17 +186,20 @@ function enrichWeek(weekEntry, metadata) {
   };
 }
 
-function buildControlCell(day, hasDateMismatch) {
+function buildControlCell(day, hasDateMismatch, pdfUrl) {
   if (!hasDateMismatch || day.dangerRange !== 'JA') {
     return '<span class="empty">-</span>';
   }
 
   const title = day.sourceDateLabel ? ` title="PDF-raddatum: ${escapeHtml(day.sourceDateLabel)}"` : '';
+  const detail = pdfUrl
+    ? `<a href="${escapeHtml(pdfUrl)}" target="_blank" rel="noopener noreferrer" class="control-detail"${title}>Datum/vecka fel i PDF</a>`
+    : `<span class="control-detail"${title}>Datum/vecka fel i PDF</span>`;
 
-  return `<span class="control-flag"${title}>KONTROLLERA</span><br><span class="control-detail">Datum/vecka fel i PDF</span>`;
+  return `<span class="control-flag">KONTROLLERA</span><br>${detail}`;
 }
 
-function buildDayRow(week, day, hasDateMismatch) {
+function buildDayRow(week, day, hasDateMismatch, pdfUrl) {
   const displayedWeek = day.dayName === 'Monday' ? String(week) : '';
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
   const isToday = isTodayDate(day.exportedDate);
@@ -211,7 +215,7 @@ function buildDayRow(week, day, hasDateMismatch) {
     `            <td${dateCellClass}>${renderedDate}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
-    `            <td class="control col-control">${buildControlCell(day, hasDateMismatch)}</td>`,
+    `            <td class="control col-control">${buildControlCell(day, hasDateMismatch, pdfUrl)}</td>`,
     '          </tr>',
   ].join('\n');
 }
@@ -221,7 +225,7 @@ function buildSection(weeks) {
   // restricted time, and danger range, but not visually reliable enough to
   // render "Annan verksamhet" or "Anmärkning" from the PDF template yet.
   const rows = weeks
-    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.sourceWeek, day, weekData.hasDateMismatch)))
+    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.sourceWeek, day, weekData.hasDateMismatch, weekData.pdfUrl)))
     .join('\n');
 
   return [
