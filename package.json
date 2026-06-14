@@ -4,6 +4,7 @@
   "scripts": {
     "extract:harad-rawtext": "node scripts/extract-harad-rawtext.mjs",
     "parse:harad-week-table": "node scripts/parse-harad-week-table.mjs",
+    "export:harad-avlysningar-json": "node scripts/export-harad-avlysningar-json.mjs",
     "render:harad-week-table-html": "node scripts/render-harad-week-table-html.mjs",
     "verify:harad-week-table": "node scripts/verify-harad-week-table.mjs"
   },

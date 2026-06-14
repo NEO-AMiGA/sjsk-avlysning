@@ -19,6 +19,8 @@ jobs:
       API_URL: https://www.forsvarsmakten.se/api/searchapi/get-firing-ranges?lang=sv&county=S%C3%B6dermanlands%20l%C3%A4n&location=H%C3%A4rad&skip=0
       HARAD_PDF_DIR: /tmp/harad-pdfs
       HARAD_JSON_DIR: /tmp/harad-week-table
+      HARAD_METADATA_PATH: /tmp/harad-document-metadata.json
+      HARAD_AVLYSNINGAR_JSON_PATH: avlysningar.json
 
     steps:
       - name: Checkout
@@ -72,6 +74,7 @@ jobs:
 
           links_html=""
           raw_html=""
+          metadata_json='[]'
 
           for row in "${docs[@]}"; do
             item() {
@@ -81,6 +84,8 @@ jobs:
             title="$(item '.title')"
             url="$(item '.url')"
             week="$(item '.week')"
+            year="$(item '.year')"
+            full_url="https://www.forsvarsmakten.se${url}"
 
             if [[ "$week" == "999" ]]; then
               week_label="Okänd vecka"
@@ -90,11 +95,25 @@ jobs:
 
             links_html+=$'<div class="doc">'
             links_html+=$'<div class="week">'"$week_label"$'</div>'
-            links_html+=$'<div><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></div>'
+            links_html+=$'<div><a href="'"$full_url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></div>'
             links_html+=$'</div>'
 
-            raw_html+=$'<li><a href="https://www.forsvarsmakten.se'"$url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></li>'
+            raw_html+=$'<li><a href="'"$full_url"$'" target="_blank" rel="noopener noreferrer">'"$title"$'</a></li>'
+
+            file_name="$(printf '%s' "$title" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')"
+            metadata_json="$(
+              jq -c \
+                --arg filename "$file_name" \
+                --arg title "$title" \
+                --arg url "$full_url" \
+                --argjson week "$week" \
+                --argjson year "$year" \
+                '. + [{filename: $filename, title: $title, url: $url, week: $week, year: $year}]' \
+                <<<"$metadata_json"
+            )"
           done
+
+          printf '%s\n' "$metadata_json" > "$HARAD_METADATA_PATH"
 
           cat > index.html <<EOF
           <!doctype html>
@@ -159,6 +178,9 @@ jobs:
       - name: Parse downloaded PDFs
         run: npm run parse:harad-week-table
 
+      - name: Export avlysningar.json
+        run: npm run export:harad-avlysningar-json
+
       - name: Render parsed table into index.html
         run: npm run render:harad-week-table-html
 
@@ -168,7 +190,7 @@ jobs:
           set -euo pipefail
           branch_name="${GITHUB_REF_NAME}"
 
-          if git diff --quiet -- index.html; then
+          if git diff --quiet -- index.html avlysningar.json; then
             echo "No changes"
             exit 0
           fi
@@ -176,7 +198,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add index.html
+          git add index.html avlysningar.json
           git commit -m "Update Härad page"
           git pull --rebase origin "${branch_name}"
           git push origin "${branch_name}"
