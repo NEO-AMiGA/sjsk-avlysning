@@ -102,7 +102,7 @@ function buildStyles() {
     '    .weektable .risk-empty,.weektable .empty{color:#999}',
     '    .weektable .center{text-align:center}',
     '    .weektable .time{text-align:center}',
-    '    .weektable .control{white-space:normal;line-height:1.2}',
+    '    .weektable .control{white-space:normal;line-height:1.2;vertical-align:middle}',
     '    .weektable .control-flag{font-weight:700;color:#8b2d21}',
     '    .weektable .control-detail{font-size:11px;color:#7a514b}',
     '    .weektable .today-day{font-weight:600}',
@@ -186,7 +186,7 @@ function enrichWeek(weekEntry, metadata) {
 }
 
 function buildControlCell(day, hasDateMismatch) {
-  if (!hasDateMismatch) {
+  if (!hasDateMismatch || day.dangerRange !== 'JA') {
     return '<span class="empty">-</span>';
   }
 
@@ -240,7 +240,7 @@ function buildSection(weeks) {
           '          <th>Datum</th>',
           '          <th class="center col-focus col-time">Avlyst tid</th>',
           '          <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>',
-          '          <th class="col-control">Kontroll</th>',
+          '          <th class="col-control">Info</th>',
         '        </tr>',
       '      </thead>',
       '      <tbody>',
