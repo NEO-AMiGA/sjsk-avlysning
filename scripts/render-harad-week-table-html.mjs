@@ -13,6 +13,7 @@ const jsonDir = path.resolve(process.env.HARAD_JSON_DIR ?? 'data/debug/harad-wee
 const metadataPath = process.env.HARAD_METADATA_PATH
   ? path.resolve(process.env.HARAD_METADATA_PATH)
   : null;
+const avlysningarPath = path.resolve(process.env.HARAD_AVLYSNINGAR_JSON_PATH ?? 'avlysningar.json');
 
 const styleStartMarker = '    /* parsed-week-table:start */';
 const styleEndMarker = '    /* parsed-week-table:end */';
@@ -60,6 +61,21 @@ async function loadMetadataMap() {
   }
 }
 
+async function loadAvlysningarDocuments() {
+  try {
+    const content = await readFile(avlysningarPath, 'utf8');
+    const payload = JSON.parse(content);
+
+    return Array.isArray(payload.documents) ? payload.documents : [];
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
+
+    throw error;
+  }
+}
+
 function replaceOrInsert(content, startMarker, endMarker, replacement, anchor) {
   const startIndex = content.indexOf(startMarker);
   const endIndex = content.indexOf(endMarker);
@@ -84,6 +100,13 @@ function buildStyles() {
     '    .tablehint{font-size:12px;color:#444;background:#fbf7d9;border-left:3px solid #d7bb4a;padding:8px 10px;margin:18px 0 10px}',
     '    .tableinfo{margin:0 0 10px}',
     '    .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}',
+    '    .docstatus{font-size:12px;color:#555;margin:0 0 14px}',
+    '    .docstatus-title{font-weight:700;color:#333;margin:0 0 4px}',
+    '    .docstatus-list{list-style:none;padding:0;margin:0}',
+    '    .docstatus-item{margin:0 0 5px}',
+    '    .docstatus-week{font-weight:700;color:#111}',
+    '    .docstatus a{color:#A43027;text-decoration:underline}',
+    '    .docstatus-warnings{display:block;color:#7a514b;font-size:11px;margin-top:1px}',
     '    .tablewrap{overflow-x:auto;margin:0 0 10px}',
     '    .tablebox{display:inline-block;min-width:max-content;max-width:100%}',
     '    .rawtitle{font-size:10px;color:#8b8b8b}',
@@ -146,6 +169,51 @@ function renderDangerValue(value) {
   return '<span class="empty">-</span>';
 }
 
+function getWarningCodes(warnings) {
+  return warnings.map((warning) => (typeof warning === 'string' ? warning : warning.code)).filter(Boolean);
+}
+
+function isRestrictedTime(value) {
+  return /^\d{1,2}(?::|\.)?\d{2}\s*-\s*\d{1,2}(?::|\.)?\d{2}$/.test(value?.trim() ?? '');
+}
+
+function buildFallbackDocumentDiagnostic(weekEntry) {
+  const exportedItems = weekEntry.days.filter((day) => isRestrictedTime(day.restrictedTime));
+  const warnings = getWarningCodes(weekEntry.data.warnings ?? []);
+
+  if (exportedItems.length === 0) {
+    warnings.push('NO_EXPORT_ITEMS');
+  }
+
+  if (weekEntry.days.length > 0 && exportedItems.length === 0) {
+    warnings.push('NO_RESTRICTED_TIME_INTERVALS');
+  }
+
+  return {
+    pdfTitle: weekEntry.pdfTitle,
+    pdfUrl: weekEntry.pdfUrl,
+    pdfFilename: weekEntry.pdfFilename,
+    week: weekEntry.sourceWeek,
+    weekEnd: weekEntry.sourceWeekEnd,
+    weekLabel: weekEntry.sourceWeekLabel,
+    year: weekEntry.sourceYear,
+    parsedRows: weekEntry.days.length,
+    exportedItems: exportedItems.length,
+    dangerJaItems: exportedItems.filter((day) => day.dangerRange === 'JA').length,
+    warnings: [...new Set(warnings)],
+  };
+}
+
+function getWarningText(code) {
+  const warningTextMap = {
+    DAY_ROWS_WITHOUT_DATES_SKIPPED: 'Vissa dagrader saknade datum i PDF-texten och hoppades över.',
+    NO_EXPORT_ITEMS: 'Inga exporterbara kalenderposter hittades.',
+    NO_RESTRICTED_TIME_INTERVALS: 'Inga parsebara tidsintervall hittades.',
+  };
+
+  return warningTextMap[code] ?? code;
+}
+
 function getTodayIsoDate() {
   return new Intl.DateTimeFormat('sv-SE', {
     year: 'numeric',
@@ -164,6 +232,7 @@ function isTodayDate(value) {
 function enrichWeek(weekEntry, metadata) {
   const year = getSourceYear(metadata, weekEntry.pdfFilename);
   const week = getSourceWeek(metadata, weekEntry.data.week, weekEntry.pdfFilename);
+  const weekLabel = metadata?.weekLabel ?? weekEntry.data.weekLabel ?? String(week);
   const days = weekEntry.data.days.map((day) => {
     const sourceDateLabel = day.sourceDateLabel ?? day.date;
 
@@ -178,8 +247,11 @@ function enrichWeek(weekEntry, metadata) {
 
   return {
     ...weekEntry,
+    pdfTitle: metadata?.title ?? weekEntry.pdfFilename,
     pdfUrl: metadata?.url ?? '',
     sourceWeek: week,
+    sourceWeekEnd: metadata?.weekEnd ?? weekEntry.data.weekEnd ?? null,
+    sourceWeekLabel: weekLabel,
     sourceYear: year,
     hasDateMismatch,
     days,
@@ -199,8 +271,8 @@ function buildControlCell(day, hasDateMismatch, pdfUrl) {
   return `<span class="control-flag">KONTROLLERA</span><br>${detail}`;
 }
 
-function buildDayRow(week, day, hasDateMismatch, pdfUrl) {
-  const displayedWeek = day.dayName === 'Monday' ? String(week) : '';
+function buildDayRow(weekLabel, day, hasDateMismatch, pdfUrl) {
+  const displayedWeek = day.dayName === 'Monday' ? String(weekLabel) : '';
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
   const isToday = isTodayDate(day.exportedDate);
   const dayCellClass = isToday ? ' class="today-day"' : '';
@@ -220,12 +292,42 @@ function buildDayRow(week, day, hasDateMismatch, pdfUrl) {
   ].join('\n');
 }
 
-function buildSection(weeks) {
+function buildDocumentStatus(weeks, documents) {
+  const documentMap = new Map(documents.map((document) => [document.pdfFilename, document]));
+  const items = weeks.map((weekData) => {
+    const document = documentMap.get(weekData.pdfFilename) ?? buildFallbackDocumentDiagnostic(weekData);
+    const weekLabel = document.weekLabel ?? String(document.week ?? weekData.sourceWeekLabel);
+    const count = Number(document.exportedItems ?? 0);
+    const countText = count === 0
+      ? 'Inga kalenderförda avlysningar hittades i denna PDF.'
+      : `${count} kalenderförd${count === 1 ? '' : 'a'} avlysning${count === 1 ? '' : 'ar'}`;
+    const link = document.pdfUrl
+      ? ` <a href="${escapeHtml(document.pdfUrl)}" target="_blank" rel="noopener noreferrer">PDF</a>`
+      : '';
+    const warnings = (document.warnings ?? []).map(getWarningText);
+    const warningHtml = warnings.length > 0
+      ? `<span class="docstatus-warnings">${warnings.map(escapeHtml).join(' ')}</span>`
+      : '';
+
+    return `      <li class="docstatus-item"><span class="docstatus-week">Vecka ${escapeHtml(weekLabel)}:</span> ${escapeHtml(countText)}${link}${warningHtml}</li>`;
+  });
+
+  return [
+    '  <div class="docstatus">',
+    '    <div class="docstatus-title">PDF-status</div>',
+    '    <ul class="docstatus-list">',
+    ...items,
+    '    </ul>',
+    '  </div>',
+  ].join('\n');
+}
+
+function buildSection(weeks, documents) {
   // The current text-extraction approach is stable enough for week/day/date,
   // restricted time, and danger range, but not visually reliable enough to
   // render "Annan verksamhet" or "Anmärkning" from the PDF template yet.
   const rows = weeks
-    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.sourceWeek, day, weekData.hasDateMismatch, weekData.pdfUrl)))
+    .flatMap((weekData) => weekData.days.map((day) => buildDayRow(weekData.sourceWeekLabel, day, weekData.hasDateMismatch, weekData.pdfUrl)))
     .join('\n');
 
   return [
@@ -234,6 +336,7 @@ function buildSection(weeks) {
     '  <div class="tableinfo">',
     '    <p class="tableinfo-strong">⚠️ Det är LIVSFARLIGT att under nedan angivna klockslag beträda skjutfältet.</p>',
     '  </div>',
+    buildDocumentStatus(weeks, documents),
     '  <div class="tablewrap">',
     '    <div class="tablebox">',
     '    <table class="weektable">',
@@ -282,10 +385,11 @@ async function loadWeeks() {
 }
 
 async function main() {
-  const [indexHtml, weeks, metadataMap] = await Promise.all([
+  const [indexHtml, weeks, metadataMap, documents] = await Promise.all([
     readFile(indexPath, 'utf8'),
     loadWeeks(),
     loadMetadataMap(),
+    loadAvlysningarDocuments(),
   ]);
   const enrichedWeeks = weeks.map((weekEntry) => enrichWeek(weekEntry, metadataMap.get(weekEntry.pdfFilename)));
 
@@ -294,7 +398,7 @@ async function main() {
     withStyles,
     sectionStartMarker,
     sectionEndMarker,
-    buildSection(enrichedWeeks),
+    buildSection(enrichedWeeks, documents),
     '  <div class="rawtitle">',
   );
 

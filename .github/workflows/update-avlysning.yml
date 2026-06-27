@@ -52,13 +52,25 @@ jobs:
           # assuming one exact filename pattern.
           mapfile -t docs < <(
             printf '%s' "$json" | jq -r '
+              def week_info:
+                (
+                  (.title | capture("(?i)v(?<week>[0-9]{1,2})(?:[-_](?:v)?(?<weekEnd>[0-9]{1,2})(?![0-9]))?")?)
+                  // (.url | capture("(?i)v(?<week>[0-9]{1,2})(?:[-_](?:v)?(?<weekEnd>[0-9]{1,2})(?![0-9]))?")?)
+                  // {"week":"999","weekEnd":null}
+                )
+                | . + {
+                    weekEnd: (.weekEnd // null),
+                    weekLabel: (
+                      if (.weekEnd // null) == null or .weekEnd == .week then
+                        .week
+                      else
+                        "\(.week)-\(.weekEnd)"
+                      end
+                    )
+                  };
               .results[0].documents
               | map(
-                  . + (
-                    (.title | capture("(?i)v(?<week>[0-9]{1,2})")?)
-                    // (.url | capture("(?i)v(?<week>[0-9]{1,2})")?)
-                    // {"week":"999"}
-                  ) + (
+                  . + week_info + (
                     (.title | capture("(?<year>[0-9]{4})")?)
                     // (.url | capture("(?<year>[0-9]{4})")?)
                     // {"year":"9999"}
@@ -84,13 +96,15 @@ jobs:
             title="$(item '.title')"
             url="$(item '.url')"
             week="$(item '.week')"
+            week_end="$(item '.weekEnd')"
+            week_label_value="$(item '.weekLabel')"
             year="$(item '.year')"
             full_url="https://www.forsvarsmakten.se${url}"
 
             if [[ "$week" == "999" ]]; then
               week_label="Okänd vecka"
             else
-              week_label="Vecka ${week}"
+              week_label="Vecka ${week_label_value}"
             fi
 
             links_html+=$'<div class="doc">'
@@ -107,8 +121,10 @@ jobs:
                 --arg title "$title" \
                 --arg url "$full_url" \
                 --argjson week "$week" \
+                --argjson weekEnd "$week_end" \
+                --arg weekLabel "$week_label_value" \
                 --argjson year "$year" \
-                '. + [{filename: $filename, title: $title, url: $url, week: $week, year: $year}]' \
+                '. + [{filename: $filename, title: $title, url: $url, week: $week, weekEnd: $weekEnd, weekLabel: $weekLabel, year: $year}]' \
                 <<<"$metadata_json"
             )"
           done
