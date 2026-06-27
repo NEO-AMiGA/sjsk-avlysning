@@ -127,10 +127,7 @@ function buildStyles() {
     '    .weektable .control{white-space:normal;line-height:1.2;vertical-align:middle}',
     '    .weektable .control-flag{font-weight:700;color:#8b2d21}',
     '    .weektable .control-detail{font-size:11px;color:#7a514b}',
-    '    .weektable .row-summary td{background:#fafafa}',
-    '    .weektable .row-summary td:not(.col-week){color:#555}',
-    '    .weektable .row-summary .col-week{color:#111;font-weight:700}',
-    '    .weektable .summary-info{white-space:normal;color:#555;line-height:1.25;max-width:220px;overflow-wrap:break-word}',
+    '    .weektable .summary-info{white-space:normal;line-height:1.25;max-width:220px;overflow-wrap:break-word}',
     '    .weektable .today-day{font-weight:600}',
     '    .weektable .today-date{font-weight:700}',
     '    .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}',
@@ -334,7 +331,7 @@ function buildSummaryRow(weekData) {
     `            <td>${dateRange ? escapeHtml(dateRange) : '<span class="empty">-</span>'}</td>`,
     '            <td class="col-time time"><span class="empty">-</span></td>',
     '            <td class="center risk col-danger"><span class="empty">-</span></td>',
-    '            <td class="control col-control summary-info">Inga avlysningar med risk över SJSK-banor hittades i denna PDF.</td>',
+    '            <td class="control col-control summary-info">Inga avlysningar med risk över banor hittades i denna PDF.</td>',
     '          </tr>',
   ].join('\n');
 }
