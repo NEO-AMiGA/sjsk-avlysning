@@ -51,25 +51,38 @@ function normalizeDate(day, month) {
   return `${day.padStart(2, '0')} ${normalizedMonth}`;
 }
 
-function extractWeekNumber(filename, text) {
-  const filenameMatch = filename.match(/-v(\d{1,2})-\d{4}/i);
+function buildWeekMetadata(week, weekEnd = null) {
+  return {
+    week,
+    weekEnd,
+    weekLabel: weekEnd && weekEnd !== week ? `${week}-${weekEnd}` : String(week),
+  };
+}
 
-  if (filenameMatch) {
-    return Number(filenameMatch[1]);
+function parseWeekToken(start, end = null) {
+  const week = Number(start);
+  const weekEnd = end ? Number(end) : null;
+
+  if (!Number.isFinite(week)) {
+    return null;
   }
 
-  const textMatch = text.match(/VECKA\s+([0-9\s]+)/i);
+  return buildWeekMetadata(week, Number.isFinite(weekEnd) ? weekEnd : null);
+}
+
+function extractWeekMetadata(filename, text) {
+  // Försvarsmakten can publish one document for a week range, for example
+  // v29-32, v29_32, or v29-v32. Match this before falling back to PDF text.
+  const filenameMatch = filename.match(/(?:^|[^A-Za-z0-9])v(\d{1,2})(?:[-_](?:v)?(\d{1,2})(?!\d))?/i);
+
+  if (filenameMatch) {
+    return parseWeekToken(filenameMatch[1], filenameMatch[2]);
+  }
+
+  const textMatch = text.match(/VECKA\s+\d?(\d{1,2})(?:\s*[-–]\s*\d?(\d{1,2}))?/i);
 
   if (textMatch) {
-    const digits = textMatch[1].replace(/\D/g, '');
-
-    if (digits.length >= 2) {
-      return Number(digits.slice(-2));
-    }
-
-    if (digits.length === 1) {
-      return Number(digits);
-    }
+    return parseWeekToken(textMatch[1], textMatch[2]);
   }
 
   throw new Error(`Could not extract week number from ${filename}`);
@@ -166,6 +179,13 @@ function extractTableLines(text) {
     .filter((line) => dayLinePattern.test(line.trim()));
 }
 
+function countRawDayLines(text) {
+  return text
+    .split('\n')
+    .filter((line) => /^(Måndag|Tisdag|Onsdag|Torsdag|Fredag|Lördag|Söndag)\b/i.test(line.trim()))
+    .length;
+}
+
 async function extractText(filePath) {
   const parser = new PDFParse({ data: await readFile(filePath) });
 
@@ -181,13 +201,29 @@ export async function parsePdfFile(filename) {
   const filePath = path.join(samplesDir, filename);
   const text = await extractText(filePath);
   const tableLines = extractTableLines(text);
+  const rawDayLineCount = countRawDayLines(text);
 
   if (tableLines.length === 0) {
     throw new Error(`No table rows found in ${filename}`);
   }
 
+  const weekMetadata = extractWeekMetadata(filename, text);
+  const warnings = [];
+
+  if (rawDayLineCount > tableLines.length) {
+    warnings.push({
+      code: 'DAY_ROWS_WITHOUT_DATES_SKIPPED',
+      message: 'Some visible day rows did not include a row date in extracted PDF text and were not parsed as dated rows.',
+      rawDayLineCount,
+      parsedDayLineCount: tableLines.length,
+    });
+  }
+
   return {
-    week: extractWeekNumber(filename, text),
+    ...weekMetadata,
+    rawDayLineCount,
+    parsedDayLineCount: tableLines.length,
+    warnings,
     days: tableLines.map(parseDayLine),
   };
 }

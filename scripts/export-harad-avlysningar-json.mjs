@@ -109,6 +109,10 @@ function buildWarnings(sourceDate, exportedDate) {
   return [];
 }
 
+function getWarningCodes(warnings) {
+  return warnings.map((warning) => (typeof warning === 'string' ? warning : warning.code)).filter(Boolean);
+}
+
 export function buildItem(parsedWeek, day, metadata, pdfFilename) {
   const normalizedTime = normalizeRestrictedTime(day.restrictedTime);
 
@@ -149,6 +153,36 @@ export function buildItem(parsedWeek, day, metadata, pdfFilename) {
   };
 }
 
+function buildDocumentDiagnostic(parsedWeek, metadata, pdfFilename, exportedItems) {
+  const warnings = getWarningCodes(parsedWeek.warnings ?? []);
+  const parsedRows = parsedWeek.days.length;
+  const exportedItemCount = exportedItems.length;
+  const rowsWithTime = parsedWeek.days.filter((day) => normalizeRestrictedTime(day.restrictedTime)).length;
+  const dangerJaItems = exportedItems.filter((item) => item.dangerRange === 'JA').length;
+
+  if (exportedItemCount === 0) {
+    warnings.push('NO_EXPORT_ITEMS');
+  }
+
+  if (parsedRows > 0 && rowsWithTime === 0) {
+    warnings.push('NO_RESTRICTED_TIME_INTERVALS');
+  }
+
+  return {
+    pdfTitle: metadata?.title ?? pdfFilename,
+    pdfUrl: metadata?.url ?? '',
+    pdfFilename,
+    week: getSourceWeek(metadata, parsedWeek.week, pdfFilename),
+    weekEnd: parsedWeek.weekEnd ?? null,
+    weekLabel: parsedWeek.weekLabel ?? String(getSourceWeek(metadata, parsedWeek.week, pdfFilename) ?? ''),
+    year: getSourceYear(metadata, pdfFilename),
+    parsedRows,
+    exportedItems: exportedItemCount,
+    dangerJaItems,
+    warnings: [...new Set(warnings)],
+  };
+}
+
 function sortItems(items) {
   return [...items].sort((left, right) => {
     const leftKey = `${left.year}-${String(left.week).padStart(2, '0')}-${left.date}-${left.start}-${left.id}`;
@@ -163,23 +197,29 @@ async function main() {
     loadParsedWeeks(),
   ]);
   const items = [];
+  const documents = [];
 
   for (const parsedWeek of parsedWeeks) {
     const metadata = metadataMap.get(parsedWeek.pdfFilename);
+    const exportedItems = [];
 
     for (const day of parsedWeek.data.days) {
       const item = buildItem(parsedWeek.data, day, metadata, parsedWeek.pdfFilename);
 
       if (item) {
         items.push(item);
+        exportedItems.push(item);
       }
     }
+
+    documents.push(buildDocumentDiagnostic(parsedWeek.data, metadata, parsedWeek.pdfFilename, exportedItems));
   }
 
   const output = {
     generatedAt: new Date().toISOString(),
     source: 'forsvarsmakten',
     range: 'harad',
+    documents,
     items: sortItems(items),
   };
 
