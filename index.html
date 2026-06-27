@@ -20,18 +20,15 @@
     .tablehint{font-size:12px;color:#444;background:#fbf7d9;border-left:3px solid #d7bb4a;padding:8px 10px;margin:18px 0 10px}
     .tableinfo{margin:0 0 10px}
     .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}
-    .docstatus{font-size:12px;color:#555;margin:0 0 14px}
-    .docstatus-title{font-weight:700;color:#333;margin:0 0 4px}
-    .docstatus-list{list-style:none;padding:0;margin:0}
-    .docstatus-item{margin:0 0 5px}
-    .docstatus-week{font-weight:700;color:#111}
-    .docstatus a{color:#A43027;text-decoration:underline}
-    .docstatus-warnings{display:block;color:#7a514b;font-size:11px;margin-top:1px}
     .tablewrap{overflow-x:auto;margin:0 0 10px}
     .tablebox{display:inline-block;min-width:max-content;max-width:100%}
     .rawtitle{font-size:10px;color:#8b8b8b}
     .rawblock{font-size:11px;color:#7a7a7a}
     .rawblock a{color:#8a6a66}
+    .pdfdiag{font-size:10px;color:#8b8b8b;margin:6px 0 0}
+    .pdfdiag-title{font-weight:600;margin:6px 0 2px}
+    .pdfdiag ul{padding-left:18px;margin:2px 0 0}
+    .pdfdiag li{margin:2px 0}
     .weektable{width:auto;min-width:0;border-collapse:collapse;font-size:13px}
     .weektable th{font-size:11px;font-weight:700;color:#111;text-align:left;padding:0 11px 5px 0;border-bottom:1px solid #ddd;white-space:nowrap}
     .weektable td{padding:4px 11px 4px 0;border-bottom:1px solid #eee;vertical-align:middle;white-space:nowrap}
@@ -48,6 +45,8 @@
     .weektable .control{white-space:normal;line-height:1.2;vertical-align:middle}
     .weektable .control-flag{font-weight:700;color:#8b2d21}
     .weektable .control-detail{font-size:11px;color:#7a514b}
+    .weektable .row-summary td{color:#555;background:#fafafa}
+    .weektable .summary-info{white-space:normal;color:#555;line-height:1.25}
     .weektable .today-day{font-weight:600}
     .weektable .today-date{font-weight:700}
     .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}
@@ -65,15 +64,6 @@
   <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Kolumnerna &quot;Annan verksamhet&quot; och &quot;Anmärkning&quot; visas inte här, så verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>
   <div class="tableinfo">
     <p class="tableinfo-strong">⚠️ Det är LIVSFARLIGT att under nedan angivna klockslag beträda skjutfältet.</p>
-  </div>
-  <div class="docstatus">
-    <div class="docstatus-title">PDF-status</div>
-    <ul class="docstatus-list">
-      <li class="docstatus-item"><span class="docstatus-week">Vecka 26:</span> 2 kalenderförda avlysningar <a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf" target="_blank" rel="noopener noreferrer">PDF</a></li>
-      <li class="docstatus-item"><span class="docstatus-week">Vecka 27:</span> 6 kalenderförda avlysningar <a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v27-2026.pdf" target="_blank" rel="noopener noreferrer">PDF</a></li>
-      <li class="docstatus-item"><span class="docstatus-week">Vecka 28:</span> 1 kalenderförd avlysning <a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v28-2026.pdf" target="_blank" rel="noopener noreferrer">PDF</a></li>
-      <li class="docstatus-item"><span class="docstatus-week">Vecka 29-32:</span> Inga kalenderförda avlysningar hittades i denna PDF. <a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v29-32-2026.pdf" target="_blank" rel="noopener noreferrer">PDF</a><span class="docstatus-warnings">Vissa dagrader saknade datum i PDF-texten och hoppades över. Inga exporterbara kalenderposter hittades. Inga parsebara tidsintervall hittades.</span></li>
-    </ul>
   </div>
   <div class="tablewrap">
     <div class="tablebox">
@@ -257,21 +247,13 @@
             <td class="center risk col-danger"><span class="empty">-</span></td>
             <td class="control col-control"><span class="empty">-</span></td>
           </tr>
-          <tr>
+          <tr class="row-summary">
             <td class="col-week">29-32</td>
-            <td>Måndag</td>
-            <td>13 <span class="month">jul</span></td>
-            <td class="col-time time">-</td>
+            <td>Period</td>
+            <td>13 jul-09 aug</td>
+            <td class="col-time time"><span class="empty">-</span></td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
-          </tr>
-          <tr>
-            <td class="col-week"></td>
-            <td>Söndag</td>
-            <td>19 <span class="month">jul</span></td>
-            <td class="col-time time">-</td>
-            <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control summary-info">Inga avlysningar med risk över SJSK-banor hittades i denna PDF.</td>
           </tr>
       </tbody>
     </table>
@@ -280,6 +262,17 @@
   <!-- parsed-week-table:end -->
   <div class="rawtitle">Originaldata i debug-syfte för webmaster</div>
   <div class="rawblock"><ul><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v26_2026_andring_2.pdf</a></li><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v27-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v27_2026.pdf</a></li><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v28-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v28_2026.pdf</a></li><li><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v29-32-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v29-32_2026.pdf</a></li></ul></div>
+  <!-- pdf-diagnostics:start -->
+  <div class="pdfdiag">
+    <div class="pdfdiag-title">PDF-diagnostik:</div>
+    <ul>
+    <li>Vecka 26: exportedItems=2, warnings=-</li>
+    <li>Vecka 27: exportedItems=6, warnings=-</li>
+    <li>Vecka 28: exportedItems=1, warnings=-</li>
+    <li>Vecka 29-32: exportedItems=0, warnings=DAY_ROWS_WITHOUT_DATES_SKIPPED, NO_EXPORT_ITEMS, NO_RESTRICTED_TIME_INTERVALS</li>
+    </ul>
+  </div>
+  <!-- pdf-diagnostics:end -->
   <script>
     window.addEventListener('load', function () {
       parent.postMessage(
