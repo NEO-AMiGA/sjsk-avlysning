@@ -8,6 +8,8 @@
   <style>
     body{font-family:ProximaNova,"Helvetica Neue",Helvetica,Arial,sans-serif;padding:20px;line-height:1.45;color:#111;margin:0}
     .updated{font-size:14px;color:#666;margin:0 0 16px}
+    .fullpage{font-size:14px;margin:-6px 0 16px}
+    .fullpage a{color:#A43027;text-decoration:underline;font-weight:600}
     .week{font-size:16px;font-weight:700;margin:0 0 1px}
     .doc{margin:0 0 12px}
     .doc a{color:#A43027;text-decoration:underline;font-size:15px;font-weight:400}
@@ -21,7 +23,7 @@
     .tableinfo{margin:0 0 10px}
     .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}
     .tablewrap{overflow-x:auto;margin:0 0 10px}
-    .tablebox{display:inline-block;min-width:max-content;max-width:100%}
+    .tablebox{display:inline-block;max-width:100%}
     .rawtitle{font-size:10px;color:#8b8b8b}
     .rawblock{font-size:11px;color:#7a7a7a}
     .rawblock a{color:#8a6a66}
@@ -45,19 +47,22 @@
     .weektable .control{white-space:normal;line-height:1.2;vertical-align:middle}
     .weektable .control-flag{font-weight:700;color:#8b2d21}
     .weektable .control-detail{font-size:11px;color:#7a514b}
-    .weektable .summary-info{white-space:normal;line-height:1.25;max-width:220px;overflow-wrap:break-word}
+    .weektable .summary-info{white-space:normal;line-height:1.25;overflow-wrap:break-word}
     .weektable .today-day{font-weight:600}
     .weektable .today-date{font-weight:700}
     .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}
     .weektable .col-week{width:40px}
-    .weektable .col-time{min-width:92px}
-    .weektable .col-danger{min-width:80px}
-    .weektable .col-control{min-width:132px}
+    .weektable .col-date{width:7ch;white-space:nowrap}
+    .weektable .col-time{width:9ch;min-width:0;white-space:nowrap}
+    .weektable .col-danger{width:8.5rem}
+    .weektable .col-info{width:14rem;max-width:16rem;white-space:normal;overflow-wrap:break-word}
+    .weektable .col-control{min-width:0}
     /* parsed-week-table:end */
   </style>
 </head>
 <body>
-  <p class="updated">Senast uppdaterad: 2026-06-28 11:26</p>
+  <p class="updated">Senast uppdaterad: 2026-06-28 12:48</p>
+  <p class="fullpage"><a href="https://avlysning.strangnas-jsk.se/" target="_blank" rel="noopener">Öppna avlysningssidan i nytt fönster</a></p>
   <div class="doc"><div class="week">Vecka 26</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v26_2026_andring_2.pdf</a></div></div><div class="doc"><div class="week">Vecka 27</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v27-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v27_2026.pdf</a></div></div><div class="doc"><div class="week">Vecka 28</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v28-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v28_2026.pdf</a></div></div><div class="doc"><div class="week">Vecka 29-32</div><div><a href="https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v29-32-2026.pdf" target="_blank" rel="noopener noreferrer">varningsmeddelande_harad_v29-32_2026.pdf</a></div></div>
   <!-- parsed-week-table:start -->
   <div class="tablehint">Nedan kalender är auto-genererad från Försvarsmaktens PDF:er. Kolumnerna &quot;Annan verksamhet&quot; och &quot;Anmärkning&quot; visas inte här, så verifiera mot PDF vid oklarheter. <strong>Original-PDF är alltid gällande.</strong> På telefon kan du behöva rotera skärmen eller scrolla i sidled för att se hela tabellen.</div>
@@ -71,188 +76,188 @@
         <tr>
           <th class="col-week">Vecka</th>
           <th>Dag</th>
-          <th>Datum</th>
+          <th class="col-date">Datum</th>
           <th class="center col-focus col-time">Avlyst tid</th>
           <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>
-          <th class="col-control">Info</th>
+          <th class="col-control col-info">Info</th>
         </tr>
       </thead>
       <tbody>
           <tr>
             <td class="col-week">26</td>
             <td>Måndag</td>
-            <td>22 <span class="month">jun</span></td>
+            <td class="col-date">22 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week"></td>
             <td>Tisdag</td>
-            <td>23 <span class="month">jun</span></td>
+            <td class="col-date">23 <span class="month">jun</span></td>
             <td class="col-time time">0900-1600</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week"></td>
             <td>Onsdag</td>
-            <td>24 <span class="month">jun</span></td>
+            <td class="col-date">24 <span class="month">jun</span></td>
             <td class="col-time time">0900-1600</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Torsdag</td>
-            <td>25 <span class="month">jun</span></td>
+            <td class="col-date">25 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Fredag</td>
-            <td>26 <span class="month">jun</span></td>
+            <td class="col-date">26 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Lördag</td>
-            <td>27 <span class="month">jun</span></td>
+            <td class="col-date">27 <span class="month">jun</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td class="today-day">Söndag</td>
-            <td class="today-date"><span class="date-emphasis">28 <span class="month">jun</span></span></td>
+            <td class="col-date today-date"><span class="date-emphasis">28 <span class="month">jun</span></span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr class="row-ja">
             <td class="col-week">27</td>
             <td>Måndag</td>
-            <td>29 <span class="month">jun</span></td>
+            <td class="col-date">29 <span class="month">jun</span></td>
             <td class="col-time time">0930-1700</td>
             <td class="center risk col-danger"><span class="risk-badge risk-yes">JA</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Tisdag</td>
-            <td>30 <span class="month">jun</span></td>
+            <td class="col-date">30 <span class="month">jun</span></td>
             <td class="col-time time">0730-2400</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Onsdag</td>
-            <td>01 <span class="month">jul</span></td>
+            <td class="col-date">01 <span class="month">jul</span></td>
             <td class="col-time time">0000-2400</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Torsdag</td>
-            <td>02 <span class="month">jul</span></td>
+            <td class="col-date">02 <span class="month">jul</span></td>
             <td class="col-time time">0000-2400</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Fredag</td>
-            <td>03 <span class="month">jul</span></td>
+            <td class="col-date">03 <span class="month">jul</span></td>
             <td class="col-time time">0000-1830</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Lördag</td>
-            <td>04 <span class="month">jul</span></td>
+            <td class="col-date">04 <span class="month">jul</span></td>
             <td class="col-time time">0000-2200</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Söndag</td>
-            <td>05 <span class="month">jul</span></td>
+            <td class="col-date">05 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week">28</td>
             <td>Måndag</td>
-            <td>06 <span class="month">jul</span></td>
+            <td class="col-date">06 <span class="month">jul</span></td>
             <td class="col-time time">1200-1800</td>
             <td class="center risk col-danger"><span class="risk-badge risk-no">NEJ</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Tisdag</td>
-            <td>07 <span class="month">jul</span></td>
+            <td class="col-date">07 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Onsdag</td>
-            <td>08 <span class="month">jul</span></td>
+            <td class="col-date">08 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Torsdag</td>
-            <td>09 <span class="month">jul</span></td>
+            <td class="col-date">09 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Fredag</td>
-            <td>10 <span class="month">jul</span></td>
+            <td class="col-date">10 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Lördag</td>
-            <td>11 <span class="month">jul</span></td>
+            <td class="col-date">11 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr>
             <td class="col-week"></td>
             <td>Söndag</td>
-            <td>12 <span class="month">jul</span></td>
+            <td class="col-date">12 <span class="month">jul</span></td>
             <td class="col-time time">-</td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control"><span class="empty">-</span></td>
+            <td class="control col-control col-info"><span class="empty">-</span></td>
           </tr>
           <tr class="row-summary">
             <td class="col-week">29-32</td>
             <td>Period</td>
-            <td>13 jul-09 aug</td>
+            <td class="col-date">13 jul-09 aug</td>
             <td class="col-time time"><span class="empty">-</span></td>
             <td class="center risk col-danger"><span class="empty">-</span></td>
-            <td class="control col-control summary-info">Inga avlysningar med risk över banor hittades i denna PDF.</td>
+            <td class="control col-control col-info summary-info">Ingen risk över SJSK-banor hittades i denna PDF.</td>
           </tr>
       </tbody>
     </table>
