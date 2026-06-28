@@ -103,7 +103,7 @@ function buildStyles() {
     '    .tableinfo{margin:0 0 10px}',
     '    .tableinfo-strong{font-size:14px;font-weight:700;color:#A43027;margin:0 0 4px}',
     '    .tablewrap{overflow-x:auto;margin:0 0 10px}',
-    '    .tablebox{display:inline-block;min-width:max-content;max-width:100%}',
+    '    .tablebox{display:inline-block;max-width:100%}',
     '    .rawtitle{font-size:10px;color:#8b8b8b}',
     '    .rawblock{font-size:11px;color:#7a7a7a}',
     '    .rawblock a{color:#8a6a66}',
@@ -127,14 +127,16 @@ function buildStyles() {
     '    .weektable .control{white-space:normal;line-height:1.2;vertical-align:middle}',
     '    .weektable .control-flag{font-weight:700;color:#8b2d21}',
     '    .weektable .control-detail{font-size:11px;color:#7a514b}',
-    '    .weektable .summary-info{white-space:normal;line-height:1.25;max-width:220px;overflow-wrap:break-word}',
+    '    .weektable .summary-info{white-space:normal;line-height:1.25;overflow-wrap:break-word}',
     '    .weektable .today-day{font-weight:600}',
     '    .weektable .today-date{font-weight:700}',
     '    .weektable .today-date .date-emphasis{display:inline-block;border-bottom:2px solid rgba(32,57,94,0.42);padding-bottom:1px}',
     '    .weektable .col-week{width:40px}',
-    '    .weektable .col-time{min-width:92px}',
-    '    .weektable .col-danger{min-width:80px}',
-    '    .weektable .col-control{min-width:132px}',
+    '    .weektable .col-date{width:7ch;white-space:nowrap}',
+    '    .weektable .col-time{width:9ch;min-width:0;white-space:nowrap}',
+    '    .weektable .col-danger{width:8.5rem}',
+    '    .weektable .col-info{width:14rem;max-width:16rem;white-space:normal;overflow-wrap:break-word}',
+    '    .weektable .col-control{min-width:0}',
     styleEndMarker,
   ].join('\n');
 }
@@ -305,7 +307,6 @@ function buildDayRow(weekLabel, day, hasDateMismatch, pdfUrl) {
   const rowClass = day.dangerRange === 'JA' ? ' class="row-ja"' : '';
   const isToday = isTodayDate(day.exportedDate);
   const dayCellClass = isToday ? ' class="today-day"' : '';
-  const dateCellClass = isToday ? ' class="today-date"' : '';
   const dateValue = renderIsoDateValue(day.exportedDate);
   const renderedDate = isToday ? `<span class="date-emphasis">${dateValue}</span>` : dateValue;
 
@@ -313,10 +314,10 @@ function buildDayRow(weekLabel, day, hasDateMismatch, pdfUrl) {
     `          <tr${rowClass}>`,
     `            <td class="col-week">${displayedWeek}</td>`,
     `            <td${dayCellClass}>${escapeHtml(dayNameMap[day.dayName] ?? day.dayName)}</td>`,
-    `            <td${dateCellClass}>${renderedDate}</td>`,
+    `            <td class="${['col-date', isToday ? 'today-date' : ''].filter(Boolean).join(' ')}">${renderedDate}</td>`,
     `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
-    `            <td class="control col-control">${buildControlCell(day, hasDateMismatch, pdfUrl)}</td>`,
+    `            <td class="control col-control col-info">${buildControlCell(day, hasDateMismatch, pdfUrl)}</td>`,
     '          </tr>',
   ].join('\n');
 }
@@ -328,10 +329,10 @@ function buildSummaryRow(weekData) {
     '          <tr class="row-summary">',
     `            <td class="col-week">${escapeHtml(weekData.sourceWeekLabel)}</td>`,
     '            <td>Period</td>',
-    `            <td>${dateRange ? escapeHtml(dateRange) : '<span class="empty">-</span>'}</td>`,
+    `            <td class="col-date">${dateRange ? escapeHtml(dateRange) : '<span class="empty">-</span>'}</td>`,
     '            <td class="col-time time"><span class="empty">-</span></td>',
     '            <td class="center risk col-danger"><span class="empty">-</span></td>',
-    '            <td class="control col-control summary-info">Inga avlysningar med risk över banor hittades i denna PDF.</td>',
+    '            <td class="control col-control col-info summary-info">Ingen risk över SJSK-banor hittades i denna PDF.</td>',
     '          </tr>',
   ].join('\n');
 }
@@ -390,10 +391,10 @@ function buildSection(weeks, documents) {
         '        <tr>',
           '          <th class="col-week">Vecka</th>',
           '          <th>Dag</th>',
-          '          <th>Datum</th>',
+          '          <th class="col-date">Datum</th>',
           '          <th class="center col-focus col-time">Avlyst tid</th>',
           '          <th class="center col-focus col-danger">Risk över<br>SJSK-banor</th>',
-          '          <th class="col-control">Info</th>',
+          '          <th class="col-control col-info">Info</th>',
         '        </tr>',
       '      </thead>',
       '      <tbody>',
