@@ -1,21 +1,8 @@
 {
-  "generatedAt": "2026-07-02T12:58:19.111Z",
+  "generatedAt": "2026-07-02T15:01:14.106Z",
   "source": "forsvarsmakten",
   "range": "harad",
   "documents": [
-    {
-      "pdfTitle": "varningsmeddelande_harad_v26_2026_andring_2.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf",
-      "pdfFilename": "varningsmeddelande_harad_v26_2026_andring_2.pdf",
-      "week": 26,
-      "weekEnd": null,
-      "weekLabel": "26",
-      "year": 2026,
-      "parsedRows": 7,
-      "exportedItems": 2,
-      "dangerJaItems": 2,
-      "warnings": []
-    },
     {
       "pdfTitle": "varningsmeddelande_harad_v27_2026.pdf",
       "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v27-2026.pdf",
@@ -61,42 +48,6 @@
     }
   ],
   "items": [
-    {
-      "id": "harad-2026-v26-2026-06-23-0900-1600",
-      "week": 26,
-      "year": 2026,
-      "dayName": "Tisdag",
-      "date": "2026-06-23",
-      "start": "09:00",
-      "end": "16:00",
-      "restrictedTime": "09:00-16:00",
-      "dangerRange": "JA",
-      "pdfTitle": "varningsmeddelande_harad_v26_2026_andring_2.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf",
-      "sourceDate": "2026-06-23",
-      "sourceDateLabel": "23 jun",
-      "warnings": [],
-      "reviewRequired": false,
-      "calendarEligible": true
-    },
-    {
-      "id": "harad-2026-v26-2026-06-24-0900-1600",
-      "week": 26,
-      "year": 2026,
-      "dayName": "Onsdag",
-      "date": "2026-06-24",
-      "start": "09:00",
-      "end": "16:00",
-      "restrictedTime": "09:00-16:00",
-      "dangerRange": "JA",
-      "pdfTitle": "varningsmeddelande_harad_v26_2026_andring_2.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v26-2026-andringstryck-2.pdf",
-      "sourceDate": "2026-06-24",
-      "sourceDateLabel": "24 jun",
-      "warnings": [],
-      "reviewRequired": false,
-      "calendarEligible": true
-    },
     {
       "id": "harad-2026-v27-2026-06-29-0930-1700",
       "week": 27,
