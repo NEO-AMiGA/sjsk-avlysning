@@ -37,6 +37,11 @@ const timeRangePattern = /^(\d{4}-\d{4})\s*(.*)$/;
 const restrictedTimePattern = /^(-|\d{4}-\d{4})\s*(.*)$/;
 const noteMarkerPattern = /\b(\d+\))/;
 
+function normalizeTimeRangeSeparators(value) {
+  // PDF text may use typographic dash characters between clock values.
+  return value.replace(/(\d)\s*[-–—−]\s*(?=\d)/g, '$1-');
+}
+
 function sortFiles(files) {
   return [...files].sort((left, right) => left.localeCompare(right, 'sv'));
 }
@@ -101,7 +106,7 @@ function assignNoteMarker(day, text) {
 }
 
 function consumeColumnSegment(segment, day) {
-  const trimmedSegment = segment.trim();
+  const trimmedSegment = normalizeTimeRangeSeparators(segment.trim());
 
   if (!trimmedSegment) {
     return;
@@ -126,7 +131,7 @@ function consumeColumnSegment(segment, day) {
   assignNoteMarker(day, trimmedSegment);
 }
 
-function parseDayLine(line) {
+export function parseDayLine(line) {
   const match = line.trim().match(dayLinePattern);
 
   if (!match) {
@@ -156,14 +161,14 @@ function parseDayLine(line) {
   // remaining content in expected left-to-right column order. It only keeps an
   // explicit note marker such as "1)" in `note`, because repeated free text on
   // the far right is not reliable enough to treat as a row-bound note.
-  const firstSegmentMatch = columnSegments[0].match(restrictedTimePattern);
+  const firstSegmentMatch = normalizeTimeRangeSeparators(columnSegments[0]).match(restrictedTimePattern);
 
   if (!firstSegmentMatch) {
     throw new Error(`Could not parse restricted time from line: ${line}`);
   }
 
   day.restrictedTime = firstSegmentMatch[1];
-  assignNoteMarker(day, firstSegmentMatch[2]);
+  consumeColumnSegment(firstSegmentMatch[2], day);
 
   for (const segment of columnSegments.slice(1)) {
     consumeColumnSegment(segment, day);

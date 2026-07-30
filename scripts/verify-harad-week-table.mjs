@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { parsePdfFile } from './parse-harad-week-table.mjs';
+import { parseDayLine, parsePdfFile } from './parse-harad-week-table.mjs';
 
 const expectations = {
   'varningsmeddelande-harad-v11-2026-andringstryck-1.pdf': {
@@ -99,6 +99,20 @@ async function verifyFile(filename, expected) {
 }
 
 async function main() {
+  assert.deepEqual(
+    parseDayLine('Tisdag 11 aug 0900–1700 NEJ Reserverat för jakt'),
+    {
+      dayName: 'Tuesday',
+      date: '11 Aug',
+      sourceDateLabel: '11 aug',
+      restrictedTime: '0900-1700',
+      dangerRange: 'NEJ',
+      otherActivity: '',
+      note: '',
+    },
+    'typographic time separator and merged danger column',
+  );
+
   for (const [filename, expected] of Object.entries(expectations)) {
     await verifyFile(filename, expected);
     console.log(`Verified ${filename}`);
