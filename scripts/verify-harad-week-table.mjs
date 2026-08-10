@@ -100,6 +100,20 @@ async function verifyFile(filename, expected) {
 
 async function main() {
   assert.deepEqual(
+    parseDayLine('Tisdag 18 aug \t– Reserverat för jakt'),
+    {
+      dayName: 'Tuesday',
+      date: '18 Aug',
+      sourceDateLabel: '18 aug',
+      restrictedTime: '-',
+      dangerRange: '',
+      otherActivity: '',
+      note: '',
+    },
+    'typographic restricted-time placeholder',
+  );
+
+  assert.deepEqual(
     parseDayLine('Tisdag 11 aug 0900–1700 NEJ Reserverat för jakt'),
     {
       dayName: 'Tuesday',

@@ -38,8 +38,10 @@ const restrictedTimePattern = /^(-|\d{4}-\d{4})\s*(.*)$/;
 const noteMarkerPattern = /\b(\d+\))/;
 
 function normalizeTimeRangeSeparators(value) {
-  // PDF text may use typographic dash characters between clock values.
-  return value.replace(/(\d)\s*[-–—−]\s*(?=\d)/g, '$1-');
+  // PDF text may use typographic dashes in clock ranges or as placeholders.
+  return value
+    .replace(/(\d)\s*[-–—−]\s*(?=\d)/g, '$1-')
+    .replace(/^[–—−](?=\s|$)/, '-');
 }
 
 function sortFiles(files) {
