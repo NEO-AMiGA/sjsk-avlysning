@@ -1,21 +1,8 @@
 {
-  "generatedAt": "2026-08-26T23:40:07.075Z",
+  "generatedAt": "2026-08-27T09:54:43.965Z",
   "source": "forsvarsmakten",
   "range": "harad",
   "documents": [
-    {
-      "pdfTitle": "varningsmeddelande-harad-v34-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v34-2026.pdf",
-      "pdfFilename": "varningsmeddelande-harad-v34-2026.pdf",
-      "week": 34,
-      "weekEnd": null,
-      "weekLabel": "34",
-      "year": 2026,
-      "parsedRows": 7,
-      "exportedItems": 1,
-      "dangerJaItems": 0,
-      "warnings": []
-    },
     {
       "pdfTitle": "varningsmeddelande-harad-v35-2026.pdf",
       "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v35-2026.pdf",
@@ -41,27 +28,22 @@
       "exportedItems": 6,
       "dangerJaItems": 0,
       "warnings": []
+    },
+    {
+      "pdfTitle": "varningsmeddelande-harad-v37-2026.pdf",
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v37-2026.pdf",
+      "pdfFilename": "varningsmeddelande-harad-v37-2026.pdf",
+      "week": 37,
+      "weekEnd": null,
+      "weekLabel": "37",
+      "year": 2026,
+      "parsedRows": 7,
+      "exportedItems": 2,
+      "dangerJaItems": 0,
+      "warnings": []
     }
   ],
   "items": [
-    {
-      "id": "harad-2026-v34-2026-08-23-0900-2400",
-      "week": 34,
-      "year": 2026,
-      "dayName": "Söndag",
-      "date": "2026-08-23",
-      "start": "09:00",
-      "end": "24:00",
-      "restrictedTime": "09:00-24:00",
-      "dangerRange": "NEJ",
-      "pdfTitle": "varningsmeddelande-harad-v34-2026.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v34-2026.pdf",
-      "sourceDate": "2026-08-23",
-      "sourceDateLabel": "23 aug",
-      "warnings": [],
-      "reviewRequired": false,
-      "calendarEligible": false
-    },
     {
       "id": "harad-2026-v35-2026-08-24-0000-2400",
       "week": 35,
@@ -238,6 +220,42 @@
       "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v36-2026.pdf",
       "sourceDate": "2026-09-05",
       "sourceDateLabel": "05 sep",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
+    },
+    {
+      "id": "harad-2026-v37-2026-09-08-0000-2400",
+      "week": 37,
+      "year": 2026,
+      "dayName": "Tisdag",
+      "date": "2026-09-08",
+      "start": "00:00",
+      "end": "24:00",
+      "restrictedTime": "00:00-24:00",
+      "dangerRange": "NEJ",
+      "pdfTitle": "varningsmeddelande-harad-v37-2026.pdf",
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v37-2026.pdf",
+      "sourceDate": "2026-09-08",
+      "sourceDateLabel": "08 sep",
+      "warnings": [],
+      "reviewRequired": false,
+      "calendarEligible": false
+    },
+    {
+      "id": "harad-2026-v37-2026-09-09-0000-2400",
+      "week": 37,
+      "year": 2026,
+      "dayName": "Onsdag",
+      "date": "2026-09-09",
+      "start": "00:00",
+      "end": "24:00",
+      "restrictedTime": "00:00-24:00",
+      "dangerRange": "NEJ",
+      "pdfTitle": "varningsmeddelande-harad-v37-2026.pdf",
+      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v37-2026.pdf",
+      "sourceDate": "2026-09-09",
+      "sourceDateLabel": "09 sep",
       "warnings": [],
       "reviewRequired": false,
       "calendarEligible": false
