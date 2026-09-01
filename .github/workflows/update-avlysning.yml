@@ -176,6 +176,17 @@ jobs:
       - name: Render parsed table into index.html
         run: npm run render:harad-week-table-html
 
+      - name: Ignore timestamp-only generated changes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if ! git diff --quiet -- index.html avlysningar.json \
+            && git diff --quiet -I '"generatedAt":|Senast uppdaterad:' -- index.html avlysningar.json; then
+            echo "Only generated timestamps changed"
+            git restore -- index.html avlysningar.json
+          fi
+
       - name: Commit and push if changed
         shell: bash
         run: |
