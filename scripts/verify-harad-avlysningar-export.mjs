@@ -63,6 +63,27 @@ function verifyNormalCase() {
   assert.equal(item.id, 'harad-2026-v25-2026-06-15-1000-1500');
 }
 
+function verifyBlankRestrictedTimeCase() {
+  const item = buildItem(
+    { week: 36 },
+    {
+      dayName: 'Wednesday',
+      date: '02 Sep',
+      sourceDateLabel: '02 sep',
+      restrictedTime: '',
+      restrictedTimeStatus: 'blank',
+      dangerRange: '',
+      otherActivity: '',
+      note: '',
+    },
+    { title: 'varningsmeddelande-harad-v36-andringstryck1-2026.pdf', week: 36, year: 2026 },
+    'varningsmeddelande-harad-v36-andringstryck1-2026.pdf',
+  );
+
+  assert.equal(item, null);
+}
+
 verifyMismatchCase();
 verifyNormalCase();
+verifyBlankRestrictedTimeCase();
 console.log('Verified avlysningar export mismatch handling');

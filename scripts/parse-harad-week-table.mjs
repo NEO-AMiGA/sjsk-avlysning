@@ -133,6 +133,15 @@ function consumeColumnSegment(segment, day) {
   assignNoteMarker(day, trimmedSegment);
 }
 
+function hasInconsistentBlankColumns(columnSegments) {
+  return columnSegments.some((segment) => {
+    const value = normalizeTimeRangeSeparators(segment.trim());
+    return /\b(JA|NEJ)\b/i.test(value)
+      || /\b\d{1,4}\s*[-:./]\s*\d{1,4}\b/.test(value)
+      || /^\d{1,4}/.test(value);
+  });
+}
+
 export function parseDayLine(line) {
   const match = line.trim().match(dayLinePattern);
 
@@ -152,6 +161,7 @@ export function parseDayLine(line) {
     date: normalizeDate(dayNumber, monthToken),
     sourceDateLabel: `${dayNumber.padStart(2, '0')} ${monthToken}`,
     restrictedTime: '',
+    restrictedTimeStatus: '',
     dangerRange: '',
     otherActivity: '',
     note: '',
@@ -166,10 +176,16 @@ export function parseDayLine(line) {
   const firstSegmentMatch = normalizeTimeRangeSeparators(columnSegments[0]).match(restrictedTimePattern);
 
   if (!firstSegmentMatch) {
-    throw new Error(`Could not parse restricted time from line: ${line}`);
+    if (hasInconsistentBlankColumns(columnSegments)) {
+      throw new Error(`Could not parse restricted time from line: ${line}`);
+    }
+
+    day.restrictedTimeStatus = 'blank';
+    return day;
   }
 
   day.restrictedTime = firstSegmentMatch[1];
+  day.restrictedTimeStatus = day.restrictedTime === '-' ? 'explicit-none' : 'interval';
   consumeColumnSegment(firstSegmentMatch[2], day);
 
   for (const segment of columnSegments.slice(1)) {
@@ -216,6 +232,8 @@ export async function parsePdfFile(filename) {
 
   const weekMetadata = extractWeekMetadata(filename, text);
   const warnings = [];
+  const days = tableLines.map(parseDayLine);
+  const blankRestrictedTimeRowCount = days.filter((day) => day.restrictedTimeStatus === 'blank').length;
 
   if (rawDayLineCount > tableLines.length) {
     warnings.push({
@@ -230,8 +248,9 @@ export async function parsePdfFile(filename) {
     ...weekMetadata,
     rawDayLineCount,
     parsedDayLineCount: tableLines.length,
+    blankRestrictedTimeRowCount,
     warnings,
-    days: tableLines.map(parseDayLine),
+    days,
   };
 }
 

@@ -145,6 +145,14 @@ function formatCellValue(value) {
   return value ? escapeHtml(value) : '<span class="empty">-</span>';
 }
 
+function renderRestrictedTime(day) {
+  if (day.restrictedTimeStatus === 'blank') {
+    return '';
+  }
+
+  return formatCellValue(day.restrictedTime);
+}
+
 function renderDateValue(value) {
   const [dayNumber, monthToken] = value.split(/\s+/, 2);
 
@@ -199,7 +207,9 @@ function buildFallbackDocumentDiagnostic(weekEntry) {
     weekEnd: weekEntry.sourceWeekEnd,
     weekLabel: weekEntry.sourceWeekLabel,
     year: weekEntry.sourceYear,
+    revision: Number(weekEntry.revision ?? 0),
     parsedRows: weekEntry.days.length,
+    blankRestrictedTimeRowCount: weekEntry.days.filter((day) => day.restrictedTimeStatus === 'blank').length,
     exportedItems: exportedItems.length,
     dangerJaItems: exportedItems.filter((day) => day.dangerRange === 'JA').length,
     warnings: [...new Set(warnings)],
@@ -284,6 +294,7 @@ function enrichWeek(weekEntry, metadata) {
     sourceWeekEnd: metadata?.weekEnd ?? weekEntry.data.weekEnd ?? null,
     sourceWeekLabel: weekLabel,
     sourceYear: year,
+    revision: Number(metadata?.revision ?? 0),
     hasDateMismatch,
     days,
   };
@@ -315,7 +326,7 @@ function buildDayRow(weekLabel, day, hasDateMismatch, pdfUrl) {
     `            <td class="col-week">${displayedWeek}</td>`,
     `            <td${dayCellClass}>${escapeHtml(dayNameMap[day.dayName] ?? day.dayName)}</td>`,
     `            <td class="${['col-date', isToday ? 'today-date' : ''].filter(Boolean).join(' ')}">${renderedDate}</td>`,
-    `            <td class="col-time time">${formatCellValue(day.restrictedTime)}</td>`,
+    `            <td class="col-time time">${renderRestrictedTime(day)}</td>`,
     `            <td class="center risk col-danger">${renderDangerValue(day.dangerRange)}</td>`,
     `            <td class="control col-control col-info">${buildControlCell(day, hasDateMismatch, pdfUrl)}</td>`,
     '          </tr>',
@@ -356,7 +367,7 @@ function buildRows(weeks, documentsForWeeks) {
 function buildPdfDiagnostics(documentsForWeeks) {
   const items = documentsForWeeks.map((document) => {
     const warnings = (document.warnings ?? []).join(', ') || '-';
-    return `    <li>Vecka ${escapeHtml(document.weekLabel ?? String(document.week ?? ''))}: exportedItems=${Number(document.exportedItems ?? 0)}, warnings=${escapeHtml(warnings)}</li>`;
+    return `    <li>Vecka ${escapeHtml(document.weekLabel ?? String(document.week ?? ''))}: exportedItems=${Number(document.exportedItems ?? 0)}, blankRestrictedTimeRows=${Number(document.blankRestrictedTimeRowCount ?? 0)}, warnings=${escapeHtml(warnings)}</li>`;
   });
 
   return [

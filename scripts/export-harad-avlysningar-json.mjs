@@ -158,6 +158,8 @@ function buildDocumentDiagnostic(parsedWeek, metadata, pdfFilename, exportedItem
   const parsedRows = parsedWeek.days.length;
   const exportedItemCount = exportedItems.length;
   const rowsWithTime = parsedWeek.days.filter((day) => normalizeRestrictedTime(day.restrictedTime)).length;
+  const blankRestrictedTimeRowCount = parsedWeek.blankRestrictedTimeRowCount
+    ?? parsedWeek.days.filter((day) => day.restrictedTimeStatus === 'blank').length;
   const dangerJaItems = exportedItems.filter((item) => item.dangerRange === 'JA').length;
 
   if (exportedItemCount === 0) {
@@ -176,7 +178,9 @@ function buildDocumentDiagnostic(parsedWeek, metadata, pdfFilename, exportedItem
     weekEnd: parsedWeek.weekEnd ?? null,
     weekLabel: parsedWeek.weekLabel ?? String(getSourceWeek(metadata, parsedWeek.week, pdfFilename) ?? ''),
     year: getSourceYear(metadata, pdfFilename),
+    revision: Number(metadata?.revision ?? 0),
     parsedRows,
+    blankRestrictedTimeRowCount,
     exportedItems: exportedItemCount,
     dangerJaItems,
     warnings: [...new Set(warnings)],

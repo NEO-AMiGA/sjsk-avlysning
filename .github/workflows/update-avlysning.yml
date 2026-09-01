@@ -47,39 +47,10 @@ jobs:
 
           json="$(curl -fsSL "$API_URL")"
 
-          # The document metadata varies in casing, separators, and title shape,
-          # so week extraction must tolerate title/url variations instead of
-          # assuming one exact filename pattern.
+          # Select only the highest amendment revision for each year/week range.
+          documents_json="$(printf '%s' "$json" | node scripts/select-harad-documents.mjs)"
           mapfile -t docs < <(
-            printf '%s' "$json" | jq -r '
-              def week_info:
-                (
-                  (.title | capture("(?i)v(?<week>[0-9]{1,2})(?:[-_](?:v)?(?<weekEnd>[0-9]{1,2})(?![0-9]))?")?)
-                  // (.url | capture("(?i)v(?<week>[0-9]{1,2})(?:[-_](?:v)?(?<weekEnd>[0-9]{1,2})(?![0-9]))?")?)
-                  // {"week":"999","weekEnd":null}
-                )
-                | . + {
-                    weekEnd: (.weekEnd // null),
-                    weekLabel: (
-                      if (.weekEnd // null) == null or .weekEnd == .week then
-                        .week
-                      else
-                        "\(.week)-\(.weekEnd)"
-                      end
-                    )
-                  };
-              .results[0].documents
-              | map(
-                  . + week_info + (
-                    (.title | capture("(?<year>[0-9]{4})")?)
-                    // (.url | capture("(?<year>[0-9]{4})")?)
-                    // {"year":"9999"}
-                  )
-                )
-              | sort_by((.year | tonumber), (.week | tonumber))
-              | .[]
-              | @base64
-            '
+            printf '%s' "$documents_json" | jq -r '.[] | @base64'
           )
 
           sv_time="$(TZ=Europe/Stockholm date '+%Y-%m-%d %H:%M')"
@@ -99,6 +70,7 @@ jobs:
             week_end="$(item '.weekEnd')"
             week_label_value="$(item '.weekLabel')"
             year="$(item '.year')"
+            revision="$(item '.revision')"
             full_url="https://www.forsvarsmakten.se${url}"
 
             if [[ "$week" == "999" ]]; then
@@ -124,7 +96,8 @@ jobs:
                 --argjson weekEnd "$week_end" \
                 --arg weekLabel "$week_label_value" \
                 --argjson year "$year" \
-                '. + [{filename: $filename, title: $title, url: $url, week: $week, weekEnd: $weekEnd, weekLabel: $weekLabel, year: $year}]' \
+                --argjson revision "$revision" \
+                '. + [{filename: $filename, title: $title, url: $url, week: $week, weekEnd: $weekEnd, weekLabel: $weekLabel, year: $year, revision: $revision}]' \
                 <<<"$metadata_json"
             )"
           done
