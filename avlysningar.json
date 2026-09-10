@@ -1,23 +1,8 @@
 {
-  "generatedAt": "2026-09-10T00:17:09.989Z",
+  "generatedAt": "2026-09-10T11:25:19.206Z",
   "source": "forsvarsmakten",
   "range": "harad",
   "documents": [
-    {
-      "pdfTitle": "varningsmeddelande_harad_v36_2026-andringstryck_1.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v36-andringstryck1-2026.pdf",
-      "pdfFilename": "varningsmeddelande_harad_v36_2026-andringstryck_1.pdf",
-      "week": 36,
-      "weekEnd": null,
-      "weekLabel": "36",
-      "year": 2026,
-      "revision": 1,
-      "parsedRows": 7,
-      "blankRestrictedTimeRowCount": 4,
-      "exportedItems": 2,
-      "dangerJaItems": 0,
-      "warnings": []
-    },
     {
       "pdfTitle": "varningsmeddelande-harad-v37-2026.pdf",
       "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v37-2026.pdf",
@@ -50,42 +35,6 @@
     }
   ],
   "items": [
-    {
-      "id": "harad-2026-v36-2026-08-31-0900-2400",
-      "week": 36,
-      "year": 2026,
-      "dayName": "Måndag",
-      "date": "2026-08-31",
-      "start": "09:00",
-      "end": "24:00",
-      "restrictedTime": "09:00-24:00",
-      "dangerRange": "NEJ",
-      "pdfTitle": "varningsmeddelande_harad_v36_2026-andringstryck_1.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v36-andringstryck1-2026.pdf",
-      "sourceDate": "2026-08-31",
-      "sourceDateLabel": "31 aug",
-      "warnings": [],
-      "reviewRequired": false,
-      "calendarEligible": false
-    },
-    {
-      "id": "harad-2026-v36-2026-09-01-0000-2400",
-      "week": 36,
-      "year": 2026,
-      "dayName": "Tisdag",
-      "date": "2026-09-01",
-      "start": "00:00",
-      "end": "24:00",
-      "restrictedTime": "00:00-24:00",
-      "dangerRange": "NEJ",
-      "pdfTitle": "varningsmeddelande_harad_v36_2026-andringstryck_1.pdf",
-      "pdfUrl": "https://www.forsvarsmakten.se/globalassets/04-regler-och-tillstand/skjutfalt-och-forbud/harad/varningsmeddelande-harad-v36-andringstryck1-2026.pdf",
-      "sourceDate": "2026-09-01",
-      "sourceDateLabel": "01 sep",
-      "warnings": [],
-      "reviewRequired": false,
-      "calendarEligible": false
-    },
     {
       "id": "harad-2026-v37-2026-09-08-0000-2400",
       "week": 37,
