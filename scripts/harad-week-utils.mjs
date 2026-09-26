@@ -1,16 +1,18 @@
 const monthNumberMap = {
-  Jan: '01',
-  Feb: '02',
-  Mar: '03',
-  Apr: '04',
-  May: '05',
-  Jun: '06',
-  Jul: '07',
-  Aug: '08',
-  Sep: '09',
-  Oct: '10',
-  Nov: '11',
-  Dec: '12',
+  jan: '01',
+  feb: '02',
+  mar: '03',
+  apr: '04',
+  maj: '05',
+  may: '05',
+  jun: '06',
+  jul: '07',
+  aug: '08',
+  sep: '09',
+  okt: '10',
+  oct: '10',
+  nov: '11',
+  dec: '12',
 };
 
 const swedishMonthLabelMap = {
@@ -80,14 +82,14 @@ export function getSourceWeek(metadata, fallbackWeek, fallbackText) {
 }
 
 export function sourceLabelToIsoDate(value, year) {
-  const match = value?.match(/^(\d{2})\s+([A-Za-z]{3})$/);
+  const match = value?.match(/^(\d{2})\s+([A-Za-z]{3})\.?$/);
 
   if (!match || !year) {
     return null;
   }
 
   const [, day, monthToken] = match;
-  const normalizedMonthToken = `${monthToken.slice(0, 1).toUpperCase()}${monthToken.slice(1).toLowerCase()}`;
+  const normalizedMonthToken = monthToken.toLowerCase();
   const month = monthNumberMap[normalizedMonthToken];
 
   if (!month) {
